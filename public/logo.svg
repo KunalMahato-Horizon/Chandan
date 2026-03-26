@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="1.5" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Thick outer ring -->
+  <circle cx="50" cy="50" r="47" fill="none" stroke="url(#premiumGrad)" stroke-width="4"/>
+  
+  <!-- Camera body - fills most of the space -->
+  <rect x="22" y="30" width="56" height="44" fill="#0f172a" rx="12" stroke="url(#premiumGrad)" stroke-width="2.5"/>
+  
+  <!-- Large lens - dominant feature -->
+  <circle cx="50" cy="52" r="18" fill="#0f172a" stroke="url(#premiumGrad)" stroke-width="2.5"/>
+  <circle cx="50" cy="52" r="14" fill="url(#premiumGrad)" opacity="0.95"/>
+  <circle cx="50" cy="52" r="9" fill="white"/>
+  <circle cx="50" cy="52" r="5" fill="#0f172a"/>
+  
+  <!-- Bold play button -->
+  <polygon points="42,58 42,70 58,64" fill="url(#premiumGrad)" stroke="white" stroke-width="1"/>
+  
+  <!-- Large viewfinder -->
+  <rect x="76" y="38" width="14" height="22" fill="#0f172a" rx="4" stroke="url(#premiumGrad)" stroke-width="2"/>
+  
+  <!-- Bold recording light -->
+  <circle cx="83" cy="35" r="6" fill="#ef4444">
+    <animate attributeName="opacity" values="1;0.4;1" dur="1s" repeatCount="indefinite"/>
+  </circle>
+</svg>

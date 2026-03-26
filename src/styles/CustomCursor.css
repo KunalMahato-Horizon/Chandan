@@ -1,0 +1,69 @@
+/* src/styles/CustomCursor.css */
+/* Hide default cursor */
+* {
+  cursor: none !important;
+}
+
+/* Custom cursor elements */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #ff3366;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s ease;
+}
+
+.cursor-outline {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ff3366;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.2s ease-out;
+  background-color: transparent;
+}
+
+/* Hover effects */
+.cursor-dot.hover {
+  transform: scale(1.5);
+  background-color: #ff6699;
+}
+
+.cursor-outline.hover {
+  transform: scale(1.5);
+  border-color: #ff6699;
+  background-color: rgba(255, 51, 102, 0.1);
+}
+
+/* Click effect */
+.cursor-dot.click {
+  transform: scale(0.8);
+  transition: transform 0.05s ease;
+}
+
+.cursor-outline.click {
+  transform: scale(0.9);
+  transition: transform 0.05s ease;
+}
+
+/* Hidden when leaving window */
+.cursor-dot.hidden,
+.cursor-outline.hidden {
+  opacity: 0;
+}
+
+/* Optional: Add custom colors for your dark theme */
+@media (prefers-color-scheme: dark) {
+  .cursor-dot {
+    background-color: #ff3366;
+  }
+  
+  .cursor-outline {
+    border-color: #ff3366;
+  }
+}
