@@ -1,25 +1,45 @@
 // src/styles/CustomCursor.jsx
-import React, { useEffect, useRef } from 'react';
-import '../styles/CustomCursor.css'; // This will import the CSS from same folder
+import React, { useEffect, useRef, useState } from 'react';
+import '../styles/CustomCursor.css';
 
 const CustomCursor = () => {
   const cursorDotRef = useRef(null);
   const cursorOutlineRef = useRef(null);
   const mousePosition = useRef({ x: 0, y: 0 });
   const outlinePosition = useRef({ x: 0, y: 0 });
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    // Hide default cursor on all elements
+    // Check if device has mouse and is desktop
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isLargeScreen = window.innerWidth >= 1024;
+    const shouldEnable = !isTouchDevice && isLargeScreen;
+    
+    setIsActive(shouldEnable);
+    
+    if (!shouldEnable) {
+      // Restore default cursor
+      document.body.style.cursor = '';
+      const style = document.getElementById('custom-cursor-style');
+      if (style) style.remove();
+      return;
+    }
+
+    // Hide default cursor
     document.body.style.cursor = 'none';
     
-    // Add style to hide cursor on all interactive elements
-    const style = document.createElement('style');
-    style.textContent = `
-      * {
-        cursor: none !important;
-      }
-    `;
-    document.head.appendChild(style);
+    // Add style to hide cursor
+    let style = document.getElementById('custom-cursor-style');
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'custom-cursor-style';
+      style.textContent = `
+        * {
+          cursor: none !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
 
     const handleMouseMove = (e) => {
       mousePosition.current = { x: e.clientX, y: e.clientY };
@@ -40,17 +60,6 @@ const CustomCursor = () => {
       cursorOutlineRef.current?.classList.remove('click');
     };
 
-    const handleMouseLeave = () => {
-      cursorDotRef.current?.classList.add('hidden');
-      cursorOutlineRef.current?.classList.add('hidden');
-    };
-
-    const handleMouseEnter = () => {
-      cursorDotRef.current?.classList.remove('hidden');
-      cursorOutlineRef.current?.classList.remove('hidden');
-    };
-
-    // Smooth follow animation for outline
     const animateOutline = () => {
       const { x, y } = mousePosition.current;
       const outlineX = outlinePosition.current.x;
@@ -67,7 +76,7 @@ const CustomCursor = () => {
       requestAnimationFrame(animateOutline);
     };
 
-    // Add hover effects to interactive elements
+    // Add hover effects
     const addHoverEffects = () => {
       const interactiveElements = document.querySelectorAll(
         'a, button, input, textarea, select, [role="button"], .interactive, .cursor-pointer'
@@ -89,61 +98,24 @@ const CustomCursor = () => {
       });
     };
 
-    // Initial hover effects
     addHoverEffects();
-
-    // Event listeners
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mousedown', handleMouseDown);
     document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('mouseleave', handleMouseLeave);
-    document.addEventListener('mouseenter', handleMouseEnter);
-
-    // Start animation
     const animationId = requestAnimationFrame(animateOutline);
 
-    // Cleanup
     return () => {
       document.body.style.cursor = '';
-      document.head.removeChild(style);
+      if (style) style.remove();
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('mouseenter', handleMouseEnter);
       cancelAnimationFrame(animationId);
     };
   }, []);
 
-  // Re-attach hover effects when DOM changes (for dynamic content)
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      const interactiveElements = document.querySelectorAll(
-        'a, button, input, textarea, select, [role="button"], .interactive, .cursor-pointer'
-      );
-      
-      const handleMouseEnterInteractive = () => {
-        cursorDotRef.current?.classList.add('hover');
-        cursorOutlineRef.current?.classList.add('hover');
-      };
-      
-      const handleMouseLeaveInteractive = () => {
-        cursorDotRef.current?.classList.remove('hover');
-        cursorOutlineRef.current?.classList.remove('hover');
-      };
-      
-      interactiveElements.forEach(el => {
-        el.removeEventListener('mouseenter', handleMouseEnterInteractive);
-        el.removeEventListener('mouseleave', handleMouseLeaveInteractive);
-        el.addEventListener('mouseenter', handleMouseEnterInteractive);
-        el.addEventListener('mouseleave', handleMouseLeaveInteractive);
-      });
-    });
-    
-    observer.observe(document.body, { childList: true, subtree: true });
-    
-    return () => observer.disconnect();
-  }, []);
+  // Don't render on mobile/touch devices
+  if (!isActive) return null;
 
   return (
     <>

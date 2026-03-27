@@ -67,3 +67,11 @@
     border-color: #ff3366;
   }
 }
+
+/* Only show cursor on desktop */
+@media (max-width: 1023px) {
+  .cursor-dot,
+  .cursor-outline {
+    display: none !important;
+  }
+}
