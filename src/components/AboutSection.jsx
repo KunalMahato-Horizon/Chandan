@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform, AnimatePresence, useAnimation, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { ArrowUpRight, Instagram, Twitter, Mail, Play, Sparkles, Film, Clock, GraduationCap, Heart, User, Layers, Zap, Camera, PenTool, Image, Video, Palette } from "lucide-react";
+import { ArrowUpRight, Instagram, Twitter, Mail, Play, Sparkles, Film, Clock, GraduationCap, Heart, User, Layers, Zap, Camera, PenTool, Image, Video, Palette, Users, Star } from "lucide-react";
 
 const AboutContact = () => {
   const containerRef = useRef(null);
@@ -51,7 +51,7 @@ const AboutContact = () => {
   ];
 
   const stats = [
-    { icon: <Film size={16} />, value: "50+", label: "Projects" },
+    { icon: <Film size={16} />, value: "280+", label: "Projects" },
     { icon: <Clock size={16} />, value: "5.6", label: "Years Editing" },
     { icon: <Layers size={16} />, value: "3.1", label: "Years Design" },
   ];
@@ -63,6 +63,16 @@ const AboutContact = () => {
     { name: "Thumbnail Design", level: 4.5, icon: <Image size={12} /> },
     { name: "Photo Editing", level: 4, icon: <Camera size={12} /> },
     { name: "Animations", level: 4, icon: <PenTool size={12} /> },
+  ];
+
+  // Client data
+  const clients = [
+    { name: "Priya Sharma", role: "Content Creator", image: "https://randomuser.me/api/portraits/women/1.jpg", rating: 5 },
+    { name: "Rajesh Mehta", role: "Marketing Director", image: "https://randomuser.me/api/portraits/men/2.jpg", rating: 5 },
+    { name: "Anjali Verma", role: "Wedding Photographer", image: "https://randomuser.me/api/portraits/women/3.jpg", rating: 5 },
+    { name: "Vikram Singh", role: "Music Producer", image: "https://randomuser.me/api/portraits/men/4.jpg", rating: 4 },
+    { name: "Neha Gupta", role: "Digital Marketer", image: "https://randomuser.me/api/portraits/women/5.jpg", rating: 5 },
+    { name: "Arjun Reddy", role: "Film Director", image: "https://randomuser.me/api/portraits/men/6.jpg", rating: 5 },
   ];
 
   // Marquee data
@@ -467,6 +477,55 @@ const AboutContact = () => {
                 </motion.div>
               </div>
             </div>
+
+            {/* Clients Section - New */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center gap-2">
+                <Users size={16} className="text-blue-400" />
+                <span className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Trusted By</span>
+              </div>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {clients.map((client, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: idx * 0.05 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white/5 border border-white/10 rounded-xl p-3 text-center group hover:border-blue-500/30 transition-all"
+                  >
+                    <div className="relative w-12 h-12 mx-auto mb-2">
+                      <img 
+                        src={client.image} 
+                        alt={client.name}
+                        className="w-full h-full rounded-full object-cover border-2 border-blue-500/30 group-hover:border-blue-500 transition-all"
+                      />
+                      <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-0.5">
+                        <Star size={8} className="text-white fill-white" />
+                      </div>
+                    </div>
+                    <h4 className="text-xs font-bold text-white truncate">{client.name}</h4>
+                    <p className="text-[9px] text-zinc-500 truncate">{client.role}</p>
+                    <div className="flex items-center justify-center gap-0.5 mt-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={8} className={i < client.rating ? "text-yellow-500 fill-yellow-500" : "text-zinc-600"} />
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <div className="text-center pt-2">
+                <span className="text-[8px] text-zinc-600 font-mono">+ 50 more satisfied clients</span>
+              </div>
+            </motion.div>
 
             {/* Contact Section */}
             <div className="space-y-10 sm:space-y-12 md:space-y-14 lg:space-y-16">

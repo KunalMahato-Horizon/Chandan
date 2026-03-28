@@ -1,7 +1,7 @@
 // src/App.js
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/VideoEditorHero";
-import ServiceSlates from "./components/FilmSlateServices";
+// import ServiceSlates from "./components/FilmSlateServices";
 import WorkGallery from "./components/WorkGallery";
 import MarqueeShowcase from "./components/ContentMarquee";
 import InteractiveAboutContact from "./components/AboutSection";
@@ -26,9 +26,9 @@ function App() {
         </section>
 
         {/* Services Section */}
-        <section id="services" className="scroll-mt-20">
+        {/* <section id="services" className="scroll-mt-20">
           <ServiceSlates />
-        </section>
+        </section> */}
 
         {/* Work Gallery Section */}
         <section id="gallery" className="scroll-mt-20 border-t border-white/5">
