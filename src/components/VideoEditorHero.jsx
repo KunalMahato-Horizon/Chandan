@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Play, ArrowRight, Monitor, Sparkles, Scissors, ChevronRight } from "lucide-react";
+import { Play, Monitor, Sparkles, Scissors, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const VideoEditorHero = ({ onPlay }) => {
@@ -17,6 +17,12 @@ const VideoEditorHero = ({ onPlay }) => {
 
   const rotateX = useTransform(mouseY, [-300, 300], [8, -8]);
   const rotateY = useTransform(mouseX, [-300, 300], [-8, 8]);
+
+  // Handle WhatsApp button click
+  const handleWhatsApp = () => {
+    const whatsappUrl = "https://wa.me/message/M6AC7MHAMGAQH1";
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  };
 
   // Check if device is mobile
   useEffect(() => {
@@ -119,25 +125,20 @@ const VideoEditorHero = ({ onPlay }) => {
 
             <motion.div variants={item} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 lg:gap-6 pt-2 sm:pt-4">
               <button 
-                onClick={onPlay}
+                onClick={handleWhatsApp}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className="group relative flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 bg-white text-black px-5 sm:px-6 lg:px-8 xl:px-10 py-2.5 sm:py-3 lg:py-4 rounded-full font-bold overflow-hidden transition-all active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(37,99,235,0.3)] text-xs sm:text-sm lg:text-base"
+                className="group relative flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 bg-white text-black px-5 sm:px-6 lg:px-8 xl:px-10 py-2.5 sm:py-3 lg:py-4 rounded-full font-bold overflow-hidden transition-all active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(37,99,235,0.3)] text-xs sm:text-sm lg:text-base cursor-pointer"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Play Showreel <Play size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" fill="currentColor" />
+                  Contact on WhatsApp <Play size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" fill="currentColor" />
                 </span>
                 <motion.div 
-                  className="absolute inset-0 bg-blue-600"
+                  className="absolute inset-0 bg-green-600"
                   initial={{ y: "100%" }}
                   animate={{ y: isHovered ? "0%" : "100%" }}
                   transition={{ type: "spring", stiffness: 100, damping: 20 }}
                 />
-              </button>
-              
-              <button className="group flex items-center justify-center gap-2 sm:gap-3 text-xs font-bold tracking-[0.2em] uppercase transition-all text-zinc-400 hover:text-white">
-                <span className="border-b border-zinc-800 pb-1 group-hover:border-white transition-colors">Contact</span>
-                <ArrowRight size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
               </button>
             </motion.div>
 
@@ -161,16 +162,20 @@ const VideoEditorHero = ({ onPlay }) => {
               <div className="hidden sm:block absolute -top-3 sm:-top-4 lg:-top-6 -left-3 sm:-left-4 lg:-left-6 w-12 sm:w-16 lg:w-24 h-12 sm:h-16 lg:h-24 border-t-2 border-l-2 border-blue-500/30 rounded-tl-[1rem] sm:rounded-tl-[1.5rem] lg:rounded-tl-[2rem] pointer-events-none" />
               
               <div className="relative aspect-[3/4] rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 bg-zinc-900 group-hover:border-white/30 transition-all duration-700 shadow-xl sm:shadow-2xl">
-                {/* Editor Profile Image */}
+                {/* Editor Profile Image - Fixed object-position to show head properly */}
                 <div className="absolute inset-0">
                   <img 
-                    src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=2070" 
+                    src="https://res.cloudinary.com/dla8tkflq/image/upload/v1774688372/Hero_g1szva.jpg" 
                     alt="Chandan Singh - Video Editor"
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    style={{ 
+                      objectPosition: "center 15%",
+                      objectFit: "cover"
+                    }}
                   />
                   
                   {/* Gradient Overlay - Adjusted for mobile */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                 </div>
                 
                 {/* Editor Info - Responsive padding and text sizes */}
@@ -187,7 +192,7 @@ const VideoEditorHero = ({ onPlay }) => {
                     <div className="flex items-center gap-1.5 sm:gap-2">
                       <span className="text-[9px] sm:text-[10px] lg:text-xs font-mono text-blue-400 tracking-wider">VIDEO EDITOR</span>
                       <ChevronRight size={8} className="sm:w-2 sm:h-2 lg:w-3 lg:h-3 text-blue-400" />
-                      <span className="text-[8px] sm:text-[9px] lg:text-xs font-mono text-zinc-400">8+ YEARS</span>
+                      <span className="text-[8px] sm:text-[9px] lg:text-xs font-mono text-zinc-400">5.6+ YEARS</span>
                     </div>
                   </motion.div>
                 </div>
@@ -197,12 +202,12 @@ const VideoEditorHero = ({ onPlay }) => {
               <div className="hidden lg:block">
                 <motion.div className="absolute -right-6 xl:-right-8 top-1/4 bg-black/40 backdrop-blur-xl border border-white/10 p-3 xl:p-4 rounded-xl xl:rounded-2xl shadow-2xl">
                   <Monitor size={14} className="xl:w-4 xl:h-4 text-blue-400 mb-1.5 xl:mb-2" />
-                  <p className="text-[7px] xl:text-[9px] font-bold text-zinc-300 uppercase tracking-tighter whitespace-nowrap">200+ Projects</p>
+                  <p className="text-[7px] xl:text-[9px] font-bold text-zinc-300 uppercase tracking-tighter whitespace-nowrap">50+ Projects</p>
                 </motion.div>
                 
                 <motion.div className="absolute -left-6 xl:-left-8 bottom-1/4 bg-black/40 backdrop-blur-xl border border-white/10 p-3 xl:p-4 rounded-xl xl:rounded-2xl shadow-2xl">
                   <Scissors size={14} className="xl:w-4 xl:h-4 text-orange-400 mb-1.5 xl:mb-2" />
-                  <p className="text-[7px] xl:text-[9px] font-bold text-zinc-300 uppercase tracking-tighter">Expert Editor</p>
+                  <p className="text-[7px] xl:text-[9px] font-bold text-zinc-300 uppercase tracking-tighter">5.6 Years</p>
                 </motion.div>
               </div>
             </div>

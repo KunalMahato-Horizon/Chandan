@@ -44,19 +44,19 @@ const Footer = () => {
       name: "Instagram", 
       icon: <Instagram size={20} />, 
       color: "hover:text-[#E1306C]",
-      url: "https://www.instagram.com/chandan__rajput__24?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+      url: "https://www.instagram.com/chandan.rajput.24?igsh=NXF3ZmkycGh0bXAw"
     },
     { 
       name: "Twitter", 
       icon: <Twitter size={20} />, 
       color: "hover:text-[#1DA1F2]",
-      url: "https://x.com/RajputChan34300/status/1899084754949173256"
+      url: "https://x.com/ChandanSin49699"
     },
     { 
       name: "WhatsApp", 
       icon: <MessageCircle size={20} />, 
       color: "hover:text-[#25D366]",
-      url: "https://t.ly/bTRbq"
+      url: "https://wa.me/message/M6AC7MHAMGAQH1"
     },
   ];
 

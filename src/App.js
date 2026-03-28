@@ -35,14 +35,14 @@ function App() {
           <WorkGallery />
         </section>
 
-        {/* Skills Marquee Section */}
-        <section id="skills" className="scroll-mt-20">
-          <MarqueeShowcase />
-        </section>
-
         {/* About Section */}
         <section id="about" className="scroll-mt-20">
           <InteractiveAboutContact />
+        </section>
+
+        {/* Testimonials Section */}
+        <section id="skills" className="scroll-mt-20">
+          <MarqueeShowcase />
         </section>
 
         {/* Contact Section */}

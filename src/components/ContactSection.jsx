@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Send, ArrowUpRight, Mail, Clock, MapPin, Sparkles } from "lucide-react";
+import { Send, ArrowUpRight, Mail, Clock, MapPin, Sparkles, Instagram, Twitter } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const ContactSection = () => {
@@ -17,15 +17,37 @@ const ContactSection = () => {
   }, []);
 
   const copyEmailToClipboard = () => {
-    navigator.clipboard.writeText("hello@framelevel.com");
+    navigator.clipboard.writeText("chandaneditz396@gmail.com");
     setEmailCopied(true);
     setTimeout(() => setEmailCopied(false), 2000);
   };
 
   const contactInfo = [
-    { icon: <Mail size={16} />, text: "hello@framelevel.com", action: copyEmailToClipboard },
-    { icon: <Clock size={16} />, text: "Response: 12-24h" },
-    { icon: <MapPin size={16} />, text: "Available Worldwide" },
+    { 
+      icon: <Mail size={16} />, 
+      text: "chandaneditz396@gmail.com", 
+      action: copyEmailToClipboard 
+    },
+    { 
+      icon: <Instagram size={16} />, 
+      text: "@chandan.rajput.24", 
+      action: () => window.open("https://www.instagram.com/chandan.rajput.24?igsh=NXF3ZmkycGh0bXAw", "_blank", "noopener,noreferrer"),
+      link: "https://www.instagram.com/chandan.rajput.24?igsh=NXF3ZmkycGh0bXAw"
+    },
+    { 
+      icon: <Twitter size={16} />, 
+      text: "@ChandanSin49699", 
+      action: () => window.open("https://x.com/ChandanSin49699", "_blank", "noopener,noreferrer"),
+      link: "https://x.com/ChandanSin49699"
+    },
+    { 
+      icon: <Clock size={16} />, 
+      text: "Response: 12-24h" 
+    },
+    { 
+      icon: <MapPin size={16} />, 
+      text: "Available Worldwide" 
+    },
   ];
 
   return (
@@ -79,7 +101,7 @@ const ContactSection = () => {
           {/* Interactive Buttons - Responsive */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 md:gap-6">
             <motion.a
-              href="mailto:hello@framelevel.com"
+              href="mailto:chandaneditz396@gmail.com"
               whileHover={!isMobile ? { scale: 1.02 } : {}}
               whileTap={{ scale: 0.98 }}
               onMouseEnter={() => setIsHovered(true)}
@@ -113,14 +135,14 @@ const ContactSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 md:gap-6 max-w-3xl mx-auto mt-12 sm:mt-16 md:mt-20 lg:mt-24"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 md:gap-6 max-w-4xl mx-auto mt-12 sm:mt-16 md:mt-20 lg:mt-24"
         >
           {contactInfo.map((info, idx) => (
             <div
               key={idx}
               onClick={info.action}
               className={`bg-white/[0.02] border border-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center transition-all ${
-                info.action ? 'cursor-pointer hover:border-blue-500/30 group active:scale-98' : ''
+                info.action ? 'cursor-pointer hover:border-blue-500/30 hover:bg-white/[0.05] group active:scale-98' : ''
               }`}
             >
               <div className="text-blue-500 flex justify-center mb-2 sm:mb-2.5 md:mb-3">
@@ -131,7 +153,8 @@ const ContactSection = () => {
               </p>
               {info.action && (
                 <span className="text-[7px] sm:text-[8px] md:text-[9px] font-mono text-zinc-600 uppercase mt-1.5 sm:mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">
-                  {emailCopied ? 'Copied to Clipboard' : 'Click to Copy'}
+                  {emailCopied && info.text === "chandaneditz396@gmail.com" ? 'Copied to Clipboard' : 
+                   info.link ? 'Click to Open' : 'Click to Copy'}
                 </span>
               )}
             </div>

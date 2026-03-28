@@ -1,48 +1,157 @@
 "use client";
 
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useAnimation, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { ArrowUpRight, Instagram, Twitter, Mail, Linkedin, Play, Sparkles, Film, Clock, MapPin, GraduationCap, Heart, User } from "lucide-react";
+import { ArrowUpRight, Instagram, Twitter, Mail, Play, Sparkles, Film, Clock, GraduationCap, Heart, User, Layers, Zap, Camera, PenTool, Image, Video, Palette } from "lucide-react";
 
 const AboutContact = () => {
   const containerRef = useRef(null);
+  const marqueeRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
 
+  const marqueeControls = useAnimation();
+  const isMarqueeInView = useInView(marqueeRef, { once: true, amount: 0.2 });
+
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  useEffect(() => {
+    if (isMarqueeInView) marqueeControls.start("visible");
+  }, [isMarqueeInView, marqueeControls]);
+
   // Parallax movement for the big background text
   const textX = useTransform(scrollYProgress, [0, 1], ["0%", isMobile ? "-15%" : "-30%"]);
   const textXReverse = useTransform(scrollYProgress, [0, 1], isMobile ? ["-10%", "5%"] : ["-20%", "10%"]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);
 
   const copyEmail = () => {
-    navigator.clipboard.writeText("chandan@visualarchitect.com");
+    navigator.clipboard.writeText("chandaneditz396@gmail.com");
     setEmailCopied(true);
     setTimeout(() => setEmailCopied(false), 2000);
   };
 
   const socialLinks = [
-    { icon: <Instagram size={18} />, label: "Instagram", url: "https://instagram.com/chandan.edits", color: "hover:text-[#E1306C]" },
-    { icon: <Twitter size={18} />, label: "Twitter", url: "https://twitter.com/chandan_edits", color: "hover:text-[#1DA1F2]" },
-    { icon: <Linkedin size={18} />, label: "LinkedIn", url: "https://linkedin.com/in/chandansingh", color: "hover:text-[#0A66C2]" },
+    { icon: <Instagram size={18} />, label: "Instagram", url: "https://www.instagram.com/chandan.rajput.24?igsh=NXF3ZmkycGh0bXAw", color: "hover:text-[#E1306C]" },
+    { icon: <Twitter size={18} />, label: "Twitter", url: "https://x.com/ChandanSin49699", color: "hover:text-[#1DA1F2]" },
+    { icon: <Mail size={18} />, label: "Email", url: "mailto:chandaneditz396@gmail.com", color: "hover:text-[#EA4335]" },
   ];
 
   const stats = [
     { icon: <Film size={16} />, value: "50+", label: "Projects" },
-    { icon: <Clock size={16} />, value: "1,500+", label: "Hours" },
-    { icon: <MapPin size={16} />, value: "India", label: "Based" },
+    { icon: <Clock size={16} />, value: "5.6", label: "Years Editing" },
+    { icon: <Layers size={16} />, value: "3.1", label: "Years Design" },
+  ];
+
+  const skills = [
+    { name: "Video Editing", level: 5, icon: <Video size={12} /> },
+    { name: "Motion Graphics", level: 4.5, icon: <Sparkles size={12} /> },
+    { name: "Graphic Design", level: 4, icon: <Layers size={12} /> },
+    { name: "Thumbnail Design", level: 4.5, icon: <Image size={12} /> },
+    { name: "Photo Editing", level: 4, icon: <Camera size={12} /> },
+    { name: "Animations", level: 4, icon: <PenTool size={12} /> },
+  ];
+
+  // Marquee data
+  const column1 = [
+    { 
+      type: "Video Editing", 
+      img: "https://images.unsplash.com/photo-1536240478700-b869070f9279?q=80&w=1000", 
+      title: "Mar 2024 – Present", 
+      views: "5.6 yrs", 
+      category: "Post-Production",
+      icon: <Video size={12} />
+    },
+    { 
+      type: "Thumbnail Design", 
+      img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1000", 
+      title: "Graphic Design", 
+      views: "High CTR", 
+      category: "Design",
+      icon: <Image size={12} />
+    },
+    { 
+      type: "Motion Graphics", 
+      img: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000", 
+      title: "Animation", 
+      views: "Kinetic", 
+      category: "Motion",
+      icon: <Layers size={12} />
+    },
+    // Duplicate for seamless loop
+    { 
+      type: "Video Editing", 
+      img: "https://images.unsplash.com/photo-1536240478700-b869070f9279?q=80&w=1000", 
+      title: "Mar 2024 – Present", 
+      views: "5.6 yrs", 
+      category: "Post-Production",
+      icon: <Video size={12} />
+    },
+    { 
+      type: "Thumbnail Design", 
+      img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1000", 
+      title: "Graphic Design", 
+      views: "High CTR", 
+      category: "Design",
+      icon: <Image size={12} />
+    },
+  ];
+
+  const column2 = [
+    { 
+      type: "Photo Editing", 
+      img: "https://images.unsplash.com/photo-1542744173-8e7e5381be6e?q=80&w=1000", 
+      title: "Retouching", 
+      ctr: "Professional", 
+      category: "Photo",
+      icon: <Camera size={12} />
+    },
+    { 
+      type: "Animations", 
+      img: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1000", 
+      title: "2D/3D", 
+      ctr: "Dynamic", 
+      category: "Animation",
+      icon: <PenTool size={12} />
+    },
+    { 
+      type: "Graphic Designer", 
+      img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1000", 
+      title: "Jun 2024 – Present", 
+      ctr: "3.1 yrs", 
+      category: "Design",
+      icon: <Palette size={12} />
+    },
+    // Duplicate for seamless loop
+    { 
+      type: "Photo Editing", 
+      img: "https://images.unsplash.com/photo-1542744173-8e7e5381be6e?q=80&w=1000", 
+      title: "Retouching", 
+      ctr: "Professional", 
+      category: "Photo",
+      icon: <Camera size={12} />
+    },
+    { 
+      type: "Animations", 
+      img: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1000", 
+      title: "2D/3D", 
+      ctr: "Dynamic", 
+      category: "Animation",
+      icon: <PenTool size={12} />
+    },
   ];
 
   return (
@@ -97,8 +206,8 @@ const AboutContact = () => {
               </div>
 
               <p className="text-zinc-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-md leading-relaxed pl-3 sm:pl-4 md:pl-5 lg:pl-6 border-l-2 border-white/10">
-                A video editor with <span className="text-white font-bold">one year of experience</span> and a 
-                master in content creation. I blend technical precision with creative storytelling.
+                A <span className="text-white font-bold">video editor</span> with <span className="text-white font-bold">5.6 years of experience</span> and a <span className="text-white font-bold">graphic designer</span> with <span className="text-white font-bold">3.1 years of expertise</span>. 
+                Professional expertise in video editing, motion graphics, and design with proven experience across multiple creative disciplines.
               </p>
             </motion.div>
 
@@ -111,8 +220,8 @@ const AboutContact = () => {
               className="grid grid-cols-3 gap-4 sm:gap-5 md:gap-6 pt-8 sm:pt-10 md:pt-12 border-t border-white/5"
             >
               {stats.map((stat, idx) => (
-                <div key={idx} className="space-y-1 sm:space-y-1.5 md:space-y-2">
-                  <div className="flex items-center gap-1.5 sm:gap-2">
+                <div key={idx} className="space-y-1 sm:space-y-1.5 md:space-y-2 text-center">
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2">
                     <div className="text-blue-500">{stat.icon}</div>
                     <div className="text-xl sm:text-2xl md:text-3xl font-bold">{stat.value}</div>
                   </div>
@@ -121,36 +230,119 @@ const AboutContact = () => {
               ))}
             </motion.div>
 
-            {/* Education & Passion - Responsive */}
+            {/* Skills Section with Expanded Skills */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.35 }}
+              className="space-y-4 sm:space-y-5 md:space-y-6"
+            >
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Zap size={14} className="text-blue-400" />
+                <span className="text-[10px] sm:text-[11px] md:text-xs font-mono text-zinc-500 uppercase tracking-wider">Core Skills</span>
+              </div>
+              <div className="space-y-3 sm:space-y-4">
+                {skills.slice(0, 3).map((skill, idx) => (
+                  <div key={idx} className="space-y-1.5 sm:space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <span className="text-blue-400">{skill.icon}</span>
+                        <span className="text-xs sm:text-sm font-medium text-zinc-300">{skill.name}</span>
+                      </div>
+                      <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono">{skill.level}/5</span>
+                    </div>
+                    <div className="h-1.5 sm:h-2 bg-white/10 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${(skill.level / 5) * 100}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, delay: 0.2 + idx * 0.1 }}
+                        className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Skill Categories with Icons */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="space-y-4 sm:space-y-5 md:space-y-6 pt-6 sm:pt-7 md:pt-8"
+              className="flex flex-wrap gap-1.5 sm:gap-2 md:gap-3"
             >
-              <div className="bg-white/5 border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 space-y-3 sm:space-y-3.5 md:space-y-4">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <GraduationCap size={16} className="sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 text-blue-400" />
-                  <span className="text-xs sm:text-sm font-mono text-zinc-300">BCA Student</span>
+              {[
+                { icon: <Video size={10} />, text: "Video Editing", color: "text-blue-500" },
+                { icon: <Image size={10} />, text: "Thumbnail Design", color: "text-green-500" },
+                { icon: <Layers size={10} />, text: "Motion Graphics", color: "text-purple-500" },
+                { icon: <Camera size={10} />, text: "Photo Editing", color: "text-amber-500" },
+                { icon: <PenTool size={10} />, text: "Animations", color: "text-cyan-500" },
+              ].map((skill, idx) => (
+                <div key={idx} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 px-2 sm:px-2.5 md:px-3 py-1 sm:py-1.5 md:py-2 bg-white/5 border border-white/10 rounded-full">
+                  <span className={skill.color}>{skill.icon}</span>
+                  <span className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-mono uppercase whitespace-nowrap">{skill.text}</span>
                 </div>
-                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-                  Balancing my studies with my passion for video editing. 
-                  Currently pursuing Bachelor of Computer Applications while creating visual stories.
-                </p>
-                <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-zinc-500">
-                  <Heart size={10} className="sm:w-2.5 sm:h-2.5 text-red-400" />
-                  <span>Passion meets profession</span>
+              ))}
+            </motion.div>
+
+            {/* Timeline Summary */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.45 }}
+              className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-3.5 md:p-4"
+            >
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-2.5 md:mb-3">
+                <Clock size={10} className="sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 text-blue-500" />
+                <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Experience Timeline</span>
+              </div>
+              <div className="space-y-1.5 sm:space-y-2">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 sm:gap-0">
+                  <span className="text-zinc-300 text-[10px] sm:text-xs">Video Editor</span>
+                  <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-zinc-500">Mar 2021 – Present</span>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 sm:gap-0">
+                  <span className="text-zinc-300 text-[10px] sm:text-xs">Graphic Designer</span>
+                  <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-zinc-500">Jun 2021 – Present</span>
                 </div>
               </div>
             </motion.div>
 
-            {/* Social Links - Responsive */}
+            {/* Education & Passion */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 }}
+              className="space-y-4 sm:space-y-5 md:space-y-6"
+            >
+              <div className="bg-white/5 border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 space-y-3 sm:space-y-3.5 md:space-y-4">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <GraduationCap size={16} className="sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 text-blue-400" />
+                  <span className="text-xs sm:text-sm font-mono text-zinc-300">BCA Student & Creative Professional</span>
+                </div>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                  Hi! I'm Chandan Singh, a video editor with 5.6 years of experience specializing in content edits and motion graphics, 
+                  and a graphic designer with 3.1 years of expertise. I'm also a BCA student, balancing my studies with my passion for visual storytelling. 
+                  Let's create something amazing together!
+                </p>
+                <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-zinc-500">
+                  <Heart size={10} className="sm:w-2.5 sm:h-2.5 text-red-400" />
+                  <span>Transforming your vision into stunning visuals</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Social Links */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
               className="space-y-5 sm:space-y-6 md:space-y-8 pt-8 sm:pt-10 md:pt-12 border-t border-white/5"
             >
               <p className="text-[9px] sm:text-[10px] md:text-xs font-mono text-zinc-700 uppercase tracking-wider">Connect // Socials</p>
@@ -159,8 +351,8 @@ const AboutContact = () => {
                   <motion.a
                     key={idx}
                     href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target={social.label !== "Email" ? "_blank" : undefined}
+                    rel={social.label !== "Email" ? "noopener noreferrer" : undefined}
                     whileHover={{ x: 4 }}
                     className="group flex items-center justify-between text-xs sm:text-sm font-medium uppercase tracking-wider py-2 sm:py-3 border-b border-white/5"
                   >
@@ -177,9 +369,9 @@ const AboutContact = () => {
             </motion.div>
           </div>
 
-          {/* Right Column: Contact & Image - Responsive */}
-          <div className="w-full lg:w-1/2 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 lg:pt-24">
-            {/* Image Container - Responsive */}
+          {/* Right Column: Contact & Marquee Section */}
+          <div className="w-full lg:w-1/2 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24">
+            {/* Image Container - Fixed Head Position */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -188,18 +380,16 @@ const AboutContact = () => {
               onMouseLeave={() => setIsHovered(false)}
               className="relative aspect-[4/5] rounded-2xl sm:rounded-3xl md:rounded-[2rem] overflow-hidden group cursor-pointer"
             >
-              <motion.img 
-                style={{ y: imageY }}
-                src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=2070" 
+              <img 
+                src="https://res.cloudinary.com/dla8tkflq/image/upload/v1774688372/Hero_g1szva.jpg" 
                 alt="Chandan Singh - Video Editor"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                style={{ objectPosition: "center 15%", objectFit: "cover" }}
               />
               
-              {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-purple-500/10" />
               
-              {/* Play Button Overlay - Responsive */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <motion.div
                   animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
@@ -214,22 +404,72 @@ const AboutContact = () => {
                 </motion.div>
               </div>
               
-              {/* Image Label - Responsive */}
               <div className="absolute top-3 left-3 sm:top-4 sm:left-4 md:top-5 md:left-5 lg:top-6 lg:left-6 bg-black/60 backdrop-blur-sm px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full border border-white/10">
                 <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono uppercase tracking-wider text-blue-400 whitespace-nowrap">Chandan Singh • Editor</span>
               </div>
               
-              {/* Experience Badge - Responsive */}
               <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 md:bottom-5 md:right-5 lg:bottom-6 lg:right-6 bg-black/60 backdrop-blur-sm px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full border border-white/10">
                 <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono uppercase tracking-wider text-amber-400 flex items-center gap-0.5 sm:gap-1">
-                  <Sparkles size={8} className="sm:w-2 sm:h-2 md:w-2.5 md:h-2.5" /> 1 Year Experience
+                  <Sparkles size={8} className="sm:w-2 sm:h-2 md:w-2.5 md:h-2.5" /> 5.6 Years Experience
                 </span>
               </div>
             </motion.div>
 
-            {/* Contact Section - Responsive */}
+            {/* Marquee Section - Skills Showcase */}
+            <div ref={marqueeRef} className="relative h-[400px] sm:h-[450px] md:h-[500px] lg:h-[700px] flex gap-3 sm:gap-4 md:gap-5 lg:gap-6 overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-3xl p-1.5 sm:p-2 md:p-3 lg:p-4 border border-white/5 bg-white/[0.02]">
+              {/* Column 1: Up */}
+              <div className="w-1/2 overflow-hidden rounded-lg sm:rounded-xl lg:rounded-2xl">
+                <motion.div 
+                  animate={{ y: [0, -800] }}
+                  transition={{ duration: isMobile ? 20 : (isTablet ? 28 : 35), repeat: Infinity, ease: "linear" }}
+                  className="flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6"
+                >
+                  {column1.map((item, idx) => (
+                    <div key={idx} className="relative aspect-[9/16] rounded-lg sm:rounded-xl lg:rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 group">
+                      <img src={item.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-2.5 sm:p-3 md:p-3.5 lg:p-4 flex flex-col justify-end">
+                        <div className="flex items-center gap-0.5 sm:gap-1 mb-0.5 sm:mb-1">
+                          <span className="text-blue-400">{item.icon}</span>
+                          <span className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-mono text-blue-500 uppercase truncate">{item.type}</span>
+                        </div>
+                        <h4 className="text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-bold uppercase leading-tight">{item.title}</h4>
+                        <p className="text-[6px] sm:text-[7px] md:text-[8px] font-mono text-zinc-400 mt-0.5 sm:mt-1 flex items-center gap-0.5 sm:gap-1">
+                          <Clock size={6} className="sm:w-1.5 sm:h-1.5" /> {item.views} • {item.category}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
+
+              {/* Column 2: Down */}
+              <div className="w-1/2 overflow-hidden rounded-lg sm:rounded-xl lg:rounded-2xl">
+                <motion.div 
+                  animate={{ y: [-800, 0] }}
+                  transition={{ duration: isMobile ? 22 : (isTablet ? 32 : 40), repeat: Infinity, ease: "linear" }}
+                  className="flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6"
+                >
+                  {column2.map((item, idx) => (
+                    <div key={idx} className="relative aspect-[4/3] rounded-lg sm:rounded-xl lg:rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 group">
+                      <img src={item.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-2.5 sm:p-3 md:p-3.5 lg:p-4 flex flex-col justify-end">
+                        <div className="flex items-center gap-0.5 sm:gap-1 mb-0.5 sm:mb-1">
+                          <span className="text-amber-400">{item.icon}</span>
+                          <span className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-mono text-amber-500 uppercase truncate">{item.type}</span>
+                        </div>
+                        <h4 className="text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-bold uppercase leading-tight">{item.title}</h4>
+                        <p className="text-[6px] sm:text-[7px] md:text-[8px] font-mono text-zinc-400 mt-0.5 sm:mt-1 flex items-center gap-0.5 sm:gap-1">
+                          <Zap size={6} className="sm:w-1.5 sm:h-1.5" /> {item.ctr} • {item.category}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Contact Section */}
             <div className="space-y-10 sm:space-y-12 md:space-y-14 lg:space-y-16">
-              {/* Availability */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -250,18 +490,17 @@ const AboutContact = () => {
                 
                 <div className="space-y-2 sm:space-y-3">
                   <p className="text-zinc-400 text-sm sm:text-base md:text-lg max-w-md leading-relaxed">
-                    Whether it's a short reel, a commercial, or a full-length project - 
+                    Whether it's content edits, motion graphics, or a full-length project - 
                     I'm ready to bring your vision to life.
                   </p>
                   
-                  {/* Email with Copy Function - Responsive */}
                   <div className="relative group pt-1 sm:pt-2">
                     <button
                       onClick={copyEmail}
                       className="flex flex-wrap items-center gap-1.5 sm:gap-2 md:gap-3 text-sm sm:text-base md:text-lg font-mono text-zinc-300 hover:text-white transition-colors"
                     >
                       <Mail size={14} className="sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 text-blue-400" />
-                      <span className="text-xs sm:text-sm md:text-base">chandan@visualarchitect.com</span>
+                      <span className="text-xs sm:text-sm md:text-base">chandaneditz396@gmail.com</span>
                       <span className="text-[8px] sm:text-[9px] md:text-[10px] text-zinc-600 group-hover:text-blue-400 transition-colors">
                         {emailCopied ? "✓ Copied" : "Click to copy"}
                       </span>
@@ -282,7 +521,6 @@ const AboutContact = () => {
                 </div>
               </motion.div>
 
-              {/* CTA Button - Responsive */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -292,21 +530,16 @@ const AboutContact = () => {
               >
                 <span className="text-[9px] sm:text-[10px] md:text-xs font-mono text-zinc-600 uppercase tracking-wider">Start a conversation</span>
                 <motion.a 
-                  href="mailto:chandan@visualarchitect.com"
+                  href="mailto:chandaneditz396@gmail.com"
                   whileHover={{ scale: 1.01, x: 3 }}
                   whileTap={{ scale: 0.98 }}
                   className="group relative flex items-center justify-center sm:justify-start gap-2 sm:gap-3 md:gap-4 bg-white text-black px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 lg:py-6 rounded-full font-black uppercase tracking-wider text-xs sm:text-sm md:text-base lg:text-lg shadow-2xl overflow-hidden"
                 >
-                  {/* Gradient Background */}
                   <div className="absolute inset-0 bg-gradient-to-r from-white to-zinc-200 group-hover:from-blue-500 group-hover:to-cyan-400 transition-all duration-500" />
-                  
-                  {/* Content */}
                   <span className="relative z-10 flex items-center gap-1.5 sm:gap-2 md:gap-3">
                     Work With Me
                     <Mail size={14} className="sm:w-4 sm:h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" />
                   </span>
-                  
-                  {/* Sparkle Effect */}
                   <AnimatePresence>
                     {isHovered && (
                       <motion.div
@@ -322,7 +555,6 @@ const AboutContact = () => {
                 </motion.a>
               </motion.div>
 
-              {/* Student Editor Badge - Responsive */}
               <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -331,14 +563,14 @@ const AboutContact = () => {
                 className="flex items-center gap-1.5 sm:gap-2 md:gap-3 bg-white/5 border border-white/10 rounded-full px-3 sm:px-4 md:px-5 lg:px-6 py-1.5 sm:py-2 md:py-2.5 lg:py-3"
               >
                 <User size={12} className="sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 text-blue-400" />
-                <span className="text-[9px] sm:text-[10px] md:text-xs font-mono text-zinc-300 whitespace-nowrap">BCA Student • Video Editor • Creator</span>
+                <span className="text-[9px] sm:text-[10px] md:text-xs font-mono text-zinc-300 whitespace-nowrap">BCA Student • Video Editor (5.6y) • Graphic Designer (3.1y)</span>
               </motion.div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Floating Badge - Responsive */}
+      {/* Floating Badge */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
