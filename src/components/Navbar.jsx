@@ -51,17 +51,27 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", controlNavbar);
   }, [lastScrollY]);
 
+  // Smooth scroll handler
+  const handleScrollToSection = (e, href) => {
+    e.preventDefault();
+    const sectionId = href.replace('#', '');
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setMobileMenuOpen(false);
+    }
+  };
+
   const navLinks = [
-    { name: "Services", href: "#services", icon: "⚡" },
-    { name: "Projects", href: "#projects", icon: "🎬" },
-    { name: "Archive", href: "#gallery", icon: "📁" },
-    { name: "About", href: "#about", icon: "👤" },
-    { name: "Contact", href: "#contact", icon: "✉️" },
+    { name: "ENTRY", href: "#hero", icon: "✦", description: "The Beginning" },
+    { name: "ARCHIVE", href: "#gallery", icon: "◈", description: "Visual Treasury" },
+    { name: "MANIFESTO", href: "#about", icon: "△", description: "The Philosophy" },
+    { name: "CHRONICLES", href: "#testimonials", icon: "⌘", description: "Client Voices" },
   ];
 
   const socialLinks = [
-    { name: "IG", full: "Instagram", href: "#", color: "hover:text-pink-500" },
-    { name: "TW", full: "Twitter", href: "#", color: "hover:text-blue-400" },
+    { name: "IG", full: "Instagram", href: "https://www.instagram.com/chandan.rajput.24?igsh=NXF3ZmkycGh0bXAw", color: "hover:text-pink-500" },
+    { name: "TW", full: "Twitter", href: "https://x.com/ChandanSin49699", color: "hover:text-blue-400" },
     { name: "YT", full: "YouTube", href: "#", color: "hover:text-red-500" },
   ];
 
@@ -91,21 +101,21 @@ const Navbar = () => {
           <motion.div 
             className="flex items-center gap-4 cursor-pointer group"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-br from-white to-white/90 text-black rounded-xl flex items-center justify-center font-black italic transition-all group-hover:from-blue-600 group-hover:to-cyan-600 group-hover:text-white shadow-xl shadow-black/20">
-                F
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-xl flex items-center justify-center font-black italic text-lg transition-all group-hover:from-blue-600 group-hover:to-cyan-600 shadow-xl shadow-black/20">
+                C
               </div>
               <div className="absolute -inset-1 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl blur-sm opacity-0 group-hover:opacity-30 transition-opacity" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[11px] font-black tracking-[0.3em] uppercase leading-none">Frame Level</span>
+              <span className="text-sm font-black uppercase tracking-tight leading-none">Chandan Singh</span>
               <div className="flex items-center gap-2 mt-1.5">
                 <div className="flex items-center gap-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-[8px] font-mono text-zinc-400 uppercase tracking-widest">Live</span>
+                  <span className="text-[8px] font-mono text-zinc-400 uppercase tracking-widest">Available</span>
                 </div>
                 <div className="h-3 w-px bg-white/10" />
                 <div className="flex items-center gap-1">
@@ -123,16 +133,22 @@ const Navbar = () => {
                 <motion.a
                   key={link.name}
                   href={link.href}
+                  onClick={(e) => handleScrollToSection(e, link.href)}
                   onMouseEnter={() => setHoveredLink(link.name)}
                   onMouseLeave={() => setHoveredLink(null)}
                   className="relative group"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity text-sm">
-                      {link.icon}
-                    </span>
-                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 hover:text-white transition-colors">
-                      {link.name}
+                  <div className="flex flex-col items-start">
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity text-sm">
+                        {link.icon}
+                      </span>
+                      <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 hover:text-white transition-colors font-bold">
+                        {link.name}
+                      </span>
+                    </div>
+                    <span className="text-[6px] text-zinc-600 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {link.description}
                     </span>
                   </div>
                   <motion.span 
@@ -148,13 +164,14 @@ const Navbar = () => {
             {/* CTA Button */}
             <motion.a 
               href="#contact"
+              onClick={(e) => handleScrollToSection(e, "#contact")}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="relative group overflow-hidden"
             >
               <div className="flex items-center gap-3 bg-white text-black hover:text-white text-[10px] font-bold uppercase tracking-widest px-8 py-3 rounded-full transition-all shadow-xl shadow-blue-500/10">
                 <span className="relative z-10 flex items-center gap-2">
-                  Start Project
+                  COLLABORATE
                   <motion.div
                     animate={{ x: [0, 3, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
@@ -220,12 +237,25 @@ const Navbar = () => {
             </div>
 
             <div className="relative h-full flex flex-col justify-between p-8 sm:p-16">
+              {/* Header with Name */}
+              <div className="mb-6 pb-6 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                    <span className="text-2xl font-black text-white">C</span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-black text-white">Chandan Singh</h3>
+                    <p className="text-[10px] font-mono text-blue-400">Visual Architect</p>
+                  </div>
+                </div>
+              </div>
+
               {/* Main Menu Links */}
               <div className="space-y-2">
                 <div className="flex items-center gap-3 mb-10">
                   <Sparkles size={12} className="text-blue-500" />
                   <p className="text-blue-400 font-mono text-[10px] tracking-[0.5em] uppercase">
-                    NAVIGATION
+                    EXPLORE
                   </p>
                 </div>
                 
@@ -238,7 +268,7 @@ const Navbar = () => {
                   >
                     <a
                       href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={(e) => handleScrollToSection(e, link.href)}
                       className="group flex items-center gap-4 py-4"
                     >
                       <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
@@ -248,8 +278,11 @@ const Navbar = () => {
                         <div className="text-4xl sm:text-5xl font-black uppercase tracking-tighter group-hover:text-blue-500 transition-colors">
                           {link.name}
                         </div>
+                        <div className="text-[8px] text-zinc-500 font-mono mt-0.5">
+                          {link.description}
+                        </div>
                         <motion.div 
-                          className="h-px bg-gradient-to-r from-blue-500 to-transparent"
+                          className="h-px bg-gradient-to-r from-blue-500 to-transparent mt-1"
                           initial={{ width: 0 }}
                           whileHover={{ width: "100%" }}
                           transition={{ duration: 0.3 }}
@@ -273,13 +306,15 @@ const Navbar = () => {
                   {/* Social Links */}
                   <div className="space-y-4">
                     <p className="text-zinc-600 font-mono text-[9px] uppercase tracking-widest">
-                      SOCIAL CONNECTION
+                      CONNECT
                     </p>
                     <div className="flex gap-6">
                       {socialLinks.map((link) => (
                         <motion.a
                           key={link.name}
                           href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           whileHover={{ y: -3 }}
                           className={`text-sm font-bold uppercase tracking-widest text-zinc-500 ${link.color} transition-colors`}
                         >
@@ -297,7 +332,7 @@ const Navbar = () => {
                     <div className="text-right">
                       <div className="text-xs font-mono text-zinc-400">Guwahati, India</div>
                       <div className="text-[10px] font-mono text-zinc-600 uppercase tracking-tighter">
-                        {currentTime} • 2026
+                        {currentTime} • {new Date().getFullYear()}
                       </div>
                     </div>
                   </div>
@@ -306,12 +341,12 @@ const Navbar = () => {
                 {/* Mobile CTA */}
                 <motion.a
                   href="#contact"
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => handleScrollToSection(e, "#contact")}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="mt-8 w-full flex items-center justify-center gap-3 bg-white text-black py-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-xl"
                 >
-                  Start A Project
+                  LET'S CREATE
                   <ArrowUpRight size={16} />
                 </motion.a>
               </div>

@@ -165,7 +165,26 @@ const AboutContact = () => {
   ];
 
   return (
-    <section ref={containerRef} className="bg-[#050505] relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-32 xl:py-48">
+    <section ref={containerRef} className="relative bg-[#080808] overflow-hidden py-16 sm:py-20 md:py-24 lg:py-32 xl:py-48">
+      
+      {/* Background Texture - Matching Hero Section */}
+      <div 
+        className="absolute inset-0 z-[1] opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-overlay"
+        aria-hidden="true"
+      />
+      
+      {/* Atmospheric Lighting - Matching Hero Section */}
+      <div 
+        className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/5 blur-[120px] rounded-full"
+        aria-hidden="true"
+      />
+      <div 
+        className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-purple-600/5 blur-[100px] rounded-full"
+        aria-hidden="true"
+      />
+      
+      {/* Divider Line Between Gallery and About */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       
       {/* Background Text Layer - Responsive */}
       <div className="absolute inset-0 flex flex-col justify-center pointer-events-none opacity-[0.02] sm:opacity-[0.03] select-none whitespace-nowrap overflow-hidden">
@@ -194,7 +213,7 @@ const AboutContact = () => {
             >
               <div className="space-y-1 sm:space-y-2">
                 <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-                  <div className="w-6 sm:w-8 md:w-10 h-px bg-gradient-to-r from-blue-500 to-transparent" />
+                  <span className="h-px w-6 sm:w-8 bg-blue-500" aria-hidden="true" />
                   <span className="text-blue-500 font-mono text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.3em] uppercase">
                     The Persona
                   </span>
@@ -215,7 +234,7 @@ const AboutContact = () => {
                 </h2>
               </div>
 
-              <p className="text-zinc-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-md leading-relaxed pl-3 sm:pl-4 md:pl-5 lg:pl-6 border-l-2 border-white/10">
+              <p className="text-zinc-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-md leading-relaxed border-l-2 border-zinc-800 pl-3 sm:pl-4 md:pl-5 lg:pl-6">
                 A <span className="text-white font-bold">video editor</span> with <span className="text-white font-bold">5.6 years of experience</span> and a <span className="text-white font-bold">graphic designer</span> with <span className="text-white font-bold">3.1 years of expertise</span>. 
                 Professional expertise in video editing, motion graphics, and design with proven experience across multiple creative disciplines.
               </p>
@@ -388,12 +407,12 @@ const AboutContact = () => {
               viewport={{ once: true }}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="relative aspect-[4/5] rounded-2xl sm:rounded-3xl md:rounded-[2rem] overflow-hidden group cursor-pointer"
+              className="relative aspect-[4/5] rounded-2xl sm:rounded-3xl md:rounded-[2rem] overflow-hidden group cursor-pointer border border-white/10"
             >
               <img 
                 src="https://res.cloudinary.com/dla8tkflq/image/upload/v1774688372/Hero_g1szva.jpg" 
                 alt="Chandan Singh - Video Editor"
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                 style={{ objectPosition: "center 15%", objectFit: "cover" }}
               />
               
@@ -426,7 +445,7 @@ const AboutContact = () => {
             </motion.div>
 
             {/* Marquee Section - Skills Showcase */}
-            <div ref={marqueeRef} className="relative h-[400px] sm:h-[450px] md:h-[500px] lg:h-[700px] flex gap-3 sm:gap-4 md:gap-5 lg:gap-6 overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-3xl p-1.5 sm:p-2 md:p-3 lg:p-4 border border-white/5 bg-white/[0.02]">
+            <div ref={marqueeRef} className="relative h-[400px] sm:h-[450px] md:h-[500px] lg:h-[700px] flex gap-3 sm:gap-4 md:gap-5 lg:gap-6 overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-3xl p-1.5 sm:p-2 md:p-3 lg:p-4 border border-white/10 bg-white/[0.02]">
               {/* Column 1: Up */}
               <div className="w-1/2 overflow-hidden rounded-lg sm:rounded-xl lg:rounded-2xl">
                 <motion.div 
@@ -436,8 +455,8 @@ const AboutContact = () => {
                 >
                   {column1.map((item, idx) => (
                     <div key={idx} className="relative aspect-[9/16] rounded-lg sm:rounded-xl lg:rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 group">
-                      <img src={item.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-2.5 sm:p-3 md:p-3.5 lg:p-4 flex flex-col justify-end">
+                      <img src={item.img} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt="" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-2.5 sm:p-3 md:p-3.5 lg:p-4 flex flex-col justify-end">
                         <div className="flex items-center gap-0.5 sm:gap-1 mb-0.5 sm:mb-1">
                           <span className="text-blue-400">{item.icon}</span>
                           <span className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-mono text-blue-500 uppercase truncate">{item.type}</span>
@@ -461,8 +480,8 @@ const AboutContact = () => {
                 >
                   {column2.map((item, idx) => (
                     <div key={idx} className="relative aspect-[4/3] rounded-lg sm:rounded-xl lg:rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 group">
-                      <img src={item.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-2.5 sm:p-3 md:p-3.5 lg:p-4 flex flex-col justify-end">
+                      <img src={item.img} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt="" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-2.5 sm:p-3 md:p-3.5 lg:p-4 flex flex-col justify-end">
                         <div className="flex items-center gap-0.5 sm:gap-1 mb-0.5 sm:mb-1">
                           <span className="text-amber-400">{item.icon}</span>
                           <span className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-mono text-amber-500 uppercase truncate">{item.type}</span>
@@ -487,11 +506,14 @@ const AboutContact = () => {
               className="space-y-6"
             >
               <div className="flex items-center gap-2">
-                <Users size={16} className="text-blue-400" />
-                <span className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Trusted By</span>
+                <div className="flex items-center gap-2">
+                  <span className="h-px w-4 sm:w-5 bg-blue-500" />
+                  <Users size={14} className="text-blue-400" />
+                </div>
+                <span className="text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Trusted By</span>
               </div>
               
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                 {clients.map((client, idx) => (
                   <motion.div
                     key={idx}
@@ -501,18 +523,18 @@ const AboutContact = () => {
                     whileHover={{ y: -5 }}
                     className="bg-white/5 border border-white/10 rounded-xl p-3 text-center group hover:border-blue-500/30 transition-all"
                   >
-                    <div className="relative w-12 h-12 mx-auto mb-2">
+                    <div className="relative w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2">
                       <img 
                         src={client.image} 
                         alt={client.name}
                         className="w-full h-full rounded-full object-cover border-2 border-blue-500/30 group-hover:border-blue-500 transition-all"
                       />
                       <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-0.5">
-                        <Star size={8} className="text-white fill-white" />
+                        <Star size={6} className="text-white fill-white sm:w-2 sm:h-2" />
                       </div>
                     </div>
-                    <h4 className="text-xs font-bold text-white truncate">{client.name}</h4>
-                    <p className="text-[9px] text-zinc-500 truncate">{client.role}</p>
+                    <h4 className="text-[10px] sm:text-xs font-bold text-white truncate">{client.name}</h4>
+                    <p className="text-[8px] sm:text-[9px] text-zinc-500 truncate">{client.role}</p>
                     <div className="flex items-center justify-center gap-0.5 mt-1">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} size={8} className={i < client.rating ? "text-yellow-500 fill-yellow-500" : "text-zinc-600"} />
@@ -523,7 +545,7 @@ const AboutContact = () => {
               </div>
               
               <div className="text-center pt-2">
-                <span className="text-[8px] text-zinc-600 font-mono">+ 50 more satisfied clients</span>
+                <span className="text-[7px] sm:text-[8px] text-zinc-600 font-mono">+ 50 more satisfied clients</span>
               </div>
             </motion.div>
 
@@ -538,7 +560,7 @@ const AboutContact = () => {
               >
                 <div className="space-y-2 sm:space-y-3 md:space-y-4">
                   <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-                    <div className="w-4 sm:w-5 md:w-6 h-px bg-gradient-to-r from-blue-500 to-transparent" />
+                    <span className="h-px w-4 sm:w-5 md:w-6 bg-blue-500" />
                     <span className="text-blue-500 font-mono text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.3em] uppercase">Let's Create</span>
                   </div>
                   <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase tracking-tight leading-[0.95]">
@@ -622,7 +644,7 @@ const AboutContact = () => {
                 className="flex items-center gap-1.5 sm:gap-2 md:gap-3 bg-white/5 border border-white/10 rounded-full px-3 sm:px-4 md:px-5 lg:px-6 py-1.5 sm:py-2 md:py-2.5 lg:py-3"
               >
                 <User size={12} className="sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 text-blue-400" />
-                <span className="text-[9px] sm:text-[10px] md:text-xs font-mono text-zinc-300 whitespace-nowrap">BCA Student • Video Editor (5.6y) • Graphic Designer (3.1y)</span>
+                <span className="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs font-mono text-zinc-300 whitespace-nowrap">BCA Student • Video Editor (5.6y) • Graphic Designer (3.1y)</span>
               </motion.div>
             </div>
           </div>
@@ -644,14 +666,13 @@ const AboutContact = () => {
 
       <style jsx global>{`
         .outline-text {
-          -webkit-text-stroke: 1px rgba(255,255,255,0.12);
+          -webkit-text-stroke: 1px rgba(255,255,255,0.1);
           color: transparent;
-          text-shadow: 0 0 30px rgba(59, 130, 246, 0.1);
         }
         
         @media (max-width: 640px) {
           .outline-text {
-            -webkit-text-stroke: 0.5px rgba(255,255,255,0.12);
+            -webkit-text-stroke: 0.5px rgba(255,255,255,0.1);
           }
         }
       `}</style>

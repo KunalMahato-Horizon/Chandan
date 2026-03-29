@@ -1,18 +1,16 @@
 // src/App.js
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/VideoEditorHero";
-// import ServiceSlates from "./components/FilmSlateServices";
 import WorkGallery from "./components/WorkGallery";
-import MarqueeShowcase from "./components/ContentMarquee";
-import InteractiveAboutContact from "./components/AboutSection";
-import ContactSection from "./components/ContactSection";
+import AboutContact from "./components/AboutSection";
+import TestimonialSection from "./components/TestimonialSection";
 import Footer from "./components/Footer";
-import CustomCursor from "./components/CustomCursor"; // Import the custom cursor
+import CustomCursor from "./components/CustomCursor";
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#080808] text-white selection:bg-blue-600 selection:text-white">
-      {/* Custom Cursor - Add this at the root level */}
+    <div className="min-h-screen bg-[#080808] text-white selection:bg-blue-600 selection:text-white overflow-x-hidden">
+      {/* Custom Cursor */}
       <CustomCursor />
       
       {/* Global Navigation */}
@@ -25,35 +23,24 @@ function App() {
           <HeroSection />
         </section>
 
-        {/* Services Section */}
-        {/* <section id="services" className="scroll-mt-20">
-          <ServiceSlates />
-        </section> */}
-
         {/* Work Gallery Section */}
-        <section id="gallery" className="scroll-mt-20 border-t border-white/5">
+        <section id="gallery" className="scroll-mt-20">
           <WorkGallery />
         </section>
 
         {/* About Section */}
         <section id="about" className="scroll-mt-20">
-          <InteractiveAboutContact />
+          <AboutContact />
         </section>
 
         {/* Testimonials Section */}
-        <section id="skills" className="scroll-mt-20">
-          <MarqueeShowcase />
+        <section id="testimonials" className="scroll-mt-20">
+          <TestimonialSection />
         </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="scroll-mt-20">
-          <ContactSection />
-        </section>
+        {/* Footer */}
+        <Footer />
       </main>
-
-      {/* Footer */}
-      <Footer />
-      
     </div>
   );
 }
