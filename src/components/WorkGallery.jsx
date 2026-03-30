@@ -44,12 +44,41 @@ const WorkGallery = ({ onVideoSelect }) => {
     }
   };
 
+  // Function to extract YouTube video ID from URL
+  const getYouTubeId = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  // Function to extract Vimeo video ID from URL
+  const getVimeoId = (url) => {
+    const regExp = /vimeo\.com\/(?:video\/)?(\d+)(?:\?.*)?$/;
+    const match = url.match(regExp);
+    return match ? match[1] : null;
+  };
+
+  // Function to get embed URL based on video platform
+  const getEmbedUrl = (url, autoplay = true, muted = true) => {
+    const youtubeId = getYouTubeId(url);
+    if (youtubeId) {
+      return `https://www.youtube.com/embed/${youtubeId}?autoplay=${autoplay ? 1 : 0}&mute=${muted ? 1 : 0}&loop=1&playlist=${youtubeId}&controls=0&modestbranding=1&rel=0`;
+    }
+    
+    const vimeoId = getVimeoId(url);
+    if (vimeoId) {
+      return `https://player.vimeo.com/video/${vimeoId}?autoplay=${autoplay ? 1 : 0}&muted=${muted ? 1 : 0}&loop=1&controls=0&title=0&byline=0&portrait=0&background=1`;
+    }
+    
+    return null;
+  };
+
   const sections = [
     {
       id: "shorts",
       title: "Shorts & Reels",
       icon: <Smartphone size={18} />,
-      description: "High-retention vertical content for social platforms",
+      description: "Curated vertical content for social platforms",
       color: "from-blue-500/20",
       borderColor: "border-blue-500/20",
       accentColor: "blue",
@@ -57,58 +86,16 @@ const WorkGallery = ({ onVideoSelect }) => {
       layout: "scroll",
       projects: [
         { 
-          title: "Gym Hook Reel", 
-          desc: "60s transformation teaser", 
-          youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-          thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-          id: "s1",
-          duration: "0:45",
-          platform: "Instagram Reels"
+          title: "Science Space Edit", 
+          desc: "A cosmic journey through science and space visuals", 
+          videoUrl: "https://vimeo.com/1064950967?fl=ip&fe=ec",
+          id: "v1",
         },
         { 
-          title: "Street Style", 
-          desc: "Fashion week highlights", 
-          youtubeUrl: "https://www.youtube.com/watch?v=9bZkp7q19f0",
-          thumbnail: "https://img.youtube.com/vi/9bZkp7q19f0/maxresdefault.jpg",
-          id: "s2",
-          duration: "0:30",
-          platform: "TikTok"
-        },
-        { 
-          title: "Tech Unboxing", 
-          desc: "Product reveal short", 
-          youtubeUrl: "https://www.youtube.com/watch?v=kJQP7kiw5Fk",
-          thumbnail: "https://img.youtube.com/vi/kJQP7kiw5Fk/maxresdefault.jpg",
-          id: "s3",
-          duration: "0:55",
-          platform: "YouTube Shorts"
-        },
-        { 
-          title: "Food Vibes", 
-          desc: "Mouth-watering cooking reel", 
-          youtubeUrl: "https://www.youtube.com/watch?v=J0Aq44Pze-w",
-          thumbnail: "https://img.youtube.com/vi/J0Aq44Pze-w/maxresdefault.jpg",
-          id: "s4",
-          duration: "0:25",
-          platform: "Instagram Reels"
-        },
-        { 
-          title: "Fitness Journey", 
-          desc: "Transformation story", 
-          youtubeUrl: "https://www.youtube.com/watch?v=ZXsQAXx_ao0",
-          thumbnail: "https://img.youtube.com/vi/ZXsQAXx_ao0/maxresdefault.jpg",
-          id: "s5",
-          duration: "0:35",
-          platform: "YouTube Shorts"
-        },
-        { 
-          title: "Travel Diaries", 
-          desc: "Cinematic travel reel", 
-          youtubeUrl: "https://www.youtube.com/watch?v=PpA9t6tqVTI",
-          thumbnail: "https://img.youtube.com/vi/PpA9t6tqVTI/maxresdefault.jpg",
-          id: "s6",
-          duration: "0:28",
-          platform: "Instagram Reels"
+          title: "The Story of Malla", 
+          desc: "A compelling narrative about Malla's journey", 
+          videoUrl: "https://vimeo.com/1064718151?fl=ip&fe=ec",
+          id: "v2",
         },
       ]
     },
@@ -125,16 +112,18 @@ const WorkGallery = ({ onVideoSelect }) => {
       projects: [
         { 
           title: "Vastu For Home",
-          youtubeUrl: "https://youtu.be/SrUJ4hiGYtQ?si=QjR_by7jxtc-j_7e",
-          thumbnail: "https://img.youtube.com/vi/J0Aq44Pze-w/maxresdefault.jpg",
+          videoUrl: "https://youtu.be/SrUJ4hiGYtQ?si=QjR_by7jxtc-j_7e",
+          thumbnail: "https://img.youtube.com/vi/SrUJ4hiGYtQ/maxresdefault.jpg",
           id: "p1",
+          duration: "15:30",
           platform: "YouTube",
         },
         { 
           title: "96 Rules of Eating", 
-          youtubeUrl: "https://youtu.be/6PiQF6p8mV0?si=P5sZ88g6O5lwTqK4",
-          thumbnail: "https://img.youtube.com/vi/ZXsQAXx_ao0/maxresdefault.jpg",
+          videoUrl: "https://youtu.be/6PiQF6p8mV0?si=P5sZ88g6O5lwTqK4",
+          thumbnail: "https://img.youtube.com/vi/6PiQF6p8mV0/maxresdefault.jpg",
           id: "p2",
+          duration: "22:45",
           platform: "YouTube",
         },
       ]
@@ -153,8 +142,8 @@ const WorkGallery = ({ onVideoSelect }) => {
         { 
           title: "The Alpine Doc", 
           desc: "Mountain expedition film", 
-          youtubeUrl: "https://youtu.be/drqDLNmihkw?si=_viJ9ITFGZg7r89B",
-          thumbnail: "https://img.youtube.com/vi/PpA9t6tqVTI/maxresdefault.jpg",
+          videoUrl: "https://youtu.be/drqDLNmihkw?si=_viJ9ITFGZg7r89B",
+          thumbnail: "https://img.youtube.com/vi/drqDLNmihkw/maxresdefault.jpg",
           id: "d1",
           duration: "22:15",
           role: "Editor & Colorist",
@@ -163,8 +152,8 @@ const WorkGallery = ({ onVideoSelect }) => {
         { 
           title: "Urban Nomads", 
           desc: "City life documentary", 
-          youtubeUrl: "https://youtu.be/ezYCsECGbG0?si=KF2X2rp-prYK4SeN",
-          thumbnail: "https://img.youtube.com/vi/WUe9dz9X7R4/maxresdefault.jpg",
+          videoUrl: "https://youtu.be/ezYCsECGbG0?si=KF2X2rp-prYK4SeN",
+          thumbnail: "https://img.youtube.com/vi/ezYCsECGbG0/maxresdefault.jpg",
           id: "d2",
           duration: "34:40",
           role: "Lead Editor",
@@ -173,13 +162,6 @@ const WorkGallery = ({ onVideoSelect }) => {
       ]
     }
   ];
-
-  // Function to extract YouTube video ID from URL
-  const getYouTubeId = (url) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-  };
 
   // Function to open video modal
   const openVideoModal = (project) => {
@@ -190,10 +172,136 @@ const WorkGallery = ({ onVideoSelect }) => {
     }
   };
 
+  // Component for Reels with actual video playback
+  const ReelVideo = ({ project, section, onClick }) => {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const videoRef = useRef(null);
+    
+    useEffect(() => {
+      if (videoRef.current && isPlaying) {
+        videoRef.current.contentWindow?.postMessage('{"method":"play"}', '*');
+      } else if (videoRef.current && !isPlaying) {
+        videoRef.current.contentWindow?.postMessage('{"method":"pause"}', '*');
+      }
+    }, [isPlaying]);
+    
+    return (
+      <div 
+        className={`group relative rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 cursor-pointer aspect-[9/16]`}
+        onMouseEnter={() => setIsPlaying(true)}
+        onMouseLeave={() => setIsPlaying(false)}
+        onClick={onClick}
+      >
+        {/* Vimeo Embed */}
+        <iframe
+          ref={videoRef}
+          src={getEmbedUrl(project.videoUrl, true, true)}
+          className="absolute inset-0 w-full h-full"
+          frameBorder="0"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+          title={project.title}
+        />
+        
+        {/* Overlay with Title (visible on hover) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+        
+        <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+          <h4 className="text-sm sm:text-base font-black uppercase tracking-tight text-white">
+            {project.title}
+          </h4>
+          <p className="text-[10px] sm:text-xs text-zinc-300 mt-1 font-mono">
+            {project.desc}
+          </p>
+        </div>
+        
+        {/* Play Button Overlay on Click */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40">
+          <div className="bg-red-600 rounded-full p-3 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
+            <Play size={24} className="text-white" fill="white" />
+          </div>
+        </div>
+        
+        <div className={`absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b ${section.color} transition-all duration-500`} />
+      </div>
+    );
+  };
+
+  // Component for regular video thumbnails (podcast, documentary)
+  const VideoThumbnail = ({ project, section, onClick }) => {
+    const [imgError, setImgError] = useState(false);
+    const videoId = getYouTubeId(project.videoUrl) || getVimeoId(project.videoUrl);
+    const fallbackUrl = project.thumbnail || (videoId ? `https://via.placeholder.com/300x400?text=${encodeURIComponent(project.title)}` : null);
+    
+    return (
+      <div className={`group relative rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 cursor-pointer hover:shadow-2xl ${
+        section.aspectRatio === 'portrait' 
+          ? 'aspect-[9/16]'
+          : 'aspect-video'
+      }`} onClick={onClick}>
+        <img 
+          src={!imgError ? (project.thumbnail || fallbackUrl) : fallbackUrl}
+          alt={project.title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 opacity-90 group-hover:opacity-100" 
+          onError={() => setImgError(true)}
+        />
+        
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40">
+          <div className="bg-red-600 rounded-full p-3 sm:p-4 md:p-5 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
+            <Play size={24} className="sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" fill="white" />
+          </div>
+        </div>
+        
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-100" />
+        
+        <div className="absolute inset-0 p-4 sm:p-5 md:p-6 lg:p-7 xl:p-8 flex flex-col justify-between">
+          <div className="flex justify-between items-start">
+            {project.duration && (
+              <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-white bg-black/60 backdrop-blur-sm px-2 sm:px-2.5 md:px-3 py-1 sm:py-1.5 rounded-full border border-white/10 uppercase tracking-widest">
+                {project.duration}
+              </span>
+            )}
+            {project.award && (
+              <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-amber-400 bg-black/60 backdrop-blur-sm px-2 sm:px-2.5 md:px-3 py-1 sm:py-1.5 rounded-full border border-amber-500/20 flex items-center gap-1">
+                <Award size={10} />
+                {project.award}
+              </span>
+            )}
+          </div>
+
+          <div>
+            <h4 className="text-sm sm:text-base md:text-lg lg:text-xl font-black uppercase tracking-tight text-white drop-shadow-lg">
+              {project.title}
+            </h4>
+            <p className="text-[10px] sm:text-xs text-zinc-300 mt-1 font-mono">
+              {project.desc}
+            </p>
+            <div className="flex items-center gap-2 mt-2 text-[8px] sm:text-[9px] md:text-[10px] text-zinc-400">
+              {project.guests && (
+                <>
+                  <Mic size={10} />
+                  <span>{project.guests}</span>
+                </>
+              )}
+              {project.role && (
+                <span className="text-zinc-500">{project.role}</span>
+              )}
+              {project.platform && (
+                <span className="text-zinc-500">{project.platform}</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className={`absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b ${section.color} transition-all duration-500`} />
+      </div>
+    );
+  };
+
   return (
     <>
       <section className="relative bg-[#080808] py-12 sm:py-16 md:py-20 lg:py-28 xl:py-32 px-4 sm:px-6 lg:px-8 xl:px-12 overflow-hidden">
-        {/* Background Elements - Matching Hero Section */}
+        {/* Background Elements */}
         <div 
           className="absolute inset-0 z-[1] opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-overlay"
           aria-hidden="true"
@@ -207,12 +315,11 @@ const WorkGallery = ({ onVideoSelect }) => {
           aria-hidden="true"
         />
         
-        {/* Divider Line Between Hero and Gallery */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         
         <div className="container mx-auto max-w-7xl relative z-10">
           
-          {/* Header - Responsive */}
+          {/* Header */}
           <div className="mb-12 sm:mb-16 md:mb-20 lg:mb-24">
             <div className="space-y-2 sm:space-y-3 md:space-y-4">
               <div className="flex items-center gap-3 sm:gap-4">
@@ -230,7 +337,7 @@ const WorkGallery = ({ onVideoSelect }) => {
             </div>
           </div>
 
-          {/* Sections Stacked Vertically */}
+          {/* Sections */}
           <div className="space-y-16 sm:space-y-20 md:space-y-24 lg:space-y-28 xl:space-y-32">
             {sections.map((section, sectionIdx) => (
               <motion.div
@@ -262,7 +369,7 @@ const WorkGallery = ({ onVideoSelect }) => {
                   {section.description}
                 </p>
 
-                {/* Different Layout for Shorts/Reels - Horizontal Scroll */}
+                {/* Different Layout for Shorts/Reels - Horizontal Scroll with Actual Videos */}
                 {section.id === "shorts" && section.layout === "scroll" ? (
                   <div className="relative mt-6">
                     {/* Scroll Buttons */}
@@ -288,90 +395,23 @@ const WorkGallery = ({ onVideoSelect }) => {
                       style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                     >
                       <div className="flex gap-5 sm:gap-6 md:gap-7">
-                        {section.projects.map((project, idx) => {
-                          const videoId = getYouTubeId(project.youtubeUrl);
-                          const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : project.thumbnail;
-                          
-                          return (
-                            <motion.div
-                              key={project.id}
-                              initial={{ opacity: 0, x: 30 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.4, delay: idx * 0.1 }}
-                              className="group relative flex-shrink-0 w-[260px] sm:w-[280px] md:w-[300px] cursor-pointer"
+                        {section.projects.map((project, idx) => (
+                          <motion.div
+                            key={project.id}
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4, delay: idx * 0.1 }}
+                            className="flex-shrink-0 w-[260px] sm:w-[280px] md:w-[300px]"
+                          >
+                            <ReelVideo 
+                              project={project}
+                              section={section}
                               onClick={() => openVideoModal(project)}
-                            >
-                              <div className={`relative rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 hover:shadow-2xl`}>
-                                <div className="relative aspect-[9/16]">
-                                  <img 
-                                    src={thumbnailUrl}
-                                    alt={project.title}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" 
-                                    onError={(e) => {
-                                      if (videoId) {
-                                        e.target.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                                      }
-                                    }}
-                                  />
-                                  
-                                  {/* Play Button Overlay */}
-                                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40">
-                                    <div className="bg-red-600 rounded-full p-3 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
-                                      <Play size={20} className="text-white" fill="white" />
-                                    </div>
-                                  </div>
-                                  
-                                  {/* Gradient Overlay */}
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-100" />
-                                  
-                                  {/* Content Overlay */}
-                                  <div className="absolute inset-0 p-4 flex flex-col justify-between">
-                                    {/* Top Bar */}
-                                    <div className="flex justify-between items-start">
-                                      <span className="text-[8px] sm:text-[9px] font-mono text-blue-400 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-full border border-white/10 uppercase tracking-widest">
-                                        {project.duration}
-                                      </span>
-                                    </div>
-
-                                    {/* Bottom Info */}
-                                    <div className="space-y-2">
-                                      <h4 className="text-sm sm:text-base font-black uppercase tracking-tight text-white drop-shadow-lg">
-                                        {project.title}
-                                      </h4>
-                                      <p className="text-[9px] sm:text-[10px] text-zinc-300 font-mono line-clamp-2">
-                                        {project.desc}
-                                      </p>
-                                      <div className="flex items-center justify-between">
-                                        <span className="text-[7px] sm:text-[8px] font-mono text-zinc-500 uppercase tracking-wider">
-                                          {project.platform}
-                                        </span>
-                                        <motion.div 
-                                          whileTap={{ scale: 0.9 }}
-                                          className="p-1.5 sm:p-2 bg-red-600 text-white rounded-full shadow-xl"
-                                        >
-                                          <Play size={10} className="sm:w-3 sm:h-3" fill="currentColor" />
-                                        </motion.div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {/* Section Color Accent Line */}
-                                  <div className={`absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b ${section.color} transition-all duration-500`} />
-                                </div>
-                              </div>
-                            </motion.div>
-                          );
-                        })}
+                            />
+                          </motion.div>
+                        ))}
                       </div>
-                    </div>
-
-                    {/* Scroll Indicator */}
-                    <div className="flex justify-center gap-1 mt-4">
-                      <div className="w-16 h-0.5 bg-white/20 rounded-full overflow-hidden">
-                        <div className="w-1/3 h-full bg-blue-500 rounded-full" />
-                      </div>
-                      <span className="text-[8px] text-zinc-500 font-mono">Scroll →</span>
                     </div>
                   </div>
                 ) : (
@@ -381,81 +421,14 @@ const WorkGallery = ({ onVideoSelect }) => {
                       ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
                       : 'grid-cols-1 lg:grid-cols-2'
                   }`}>
-                    {section.projects.map((project, idx) => {
-                      const videoId = getYouTubeId(project.youtubeUrl);
-                      const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : project.thumbnail;
-                      
-                      return (
-                        <motion.div
-                          key={project.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.4, delay: idx * 0.1 }}
-                          className={`group relative rounded-xl sm:rounded-2xl lg:rounded-3xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 cursor-pointer hover:shadow-2xl ${
-                            section.aspectRatio === 'portrait' 
-                              ? 'aspect-[9/16]'
-                              : 'aspect-video'
-                          }`}
-                          onClick={() => openVideoModal(project)}
-                        >
-                          <img 
-                            src={thumbnailUrl}
-                            alt={project.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 opacity-90 group-hover:opacity-100" 
-                            onError={(e) => {
-                              if (videoId) {
-                                e.target.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                              }
-                            }}
-                          />
-                          
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40">
-                            <div className="bg-red-600 rounded-full p-3 sm:p-4 md:p-5 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
-                              <Play size={24} className="sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" fill="white" />
-                            </div>
-                          </div>
-                          
-                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-100" />
-                          
-                          <div className="absolute inset-0 p-4 sm:p-5 md:p-6 lg:p-7 xl:p-8 flex flex-col justify-between">
-                            <div className="flex justify-between items-start">
-                              <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-white bg-black/60 backdrop-blur-sm px-2 sm:px-2.5 md:px-3 py-1 sm:py-1.5 rounded-full border border-white/10 uppercase tracking-widest">
-                                {project.duration}
-                              </span>
-                              {project.award && (
-                                <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-amber-400 bg-black/60 backdrop-blur-sm px-2 sm:px-2.5 md:px-3 py-1 sm:py-1.5 rounded-full border border-amber-500/20 flex items-center gap-1">
-                                  <Award size={10} />
-                                  {project.award}
-                                </span>
-                              )}
-                            </div>
-
-                            <div>
-                              <h4 className="text-sm sm:text-base md:text-lg lg:text-xl font-black uppercase tracking-tight text-white drop-shadow-lg">
-                                {project.title}
-                              </h4>
-                              <p className="text-[10px] sm:text-xs text-zinc-300 mt-1 font-mono">
-                                {project.desc}
-                              </p>
-                              <div className="flex items-center gap-2 mt-2 text-[8px] sm:text-[9px] md:text-[10px] text-zinc-400">
-                                {project.guests && (
-                                  <>
-                                    <Mic size={10} />
-                                    <span>{project.guests}</span>
-                                  </>
-                                )}
-                                {project.role && (
-                                  <span className="text-zinc-500">{project.role}</span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className={`absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b ${section.color} transition-all duration-500`} />
-                        </motion.div>
-                      );
-                    })}
+                    {section.projects.map((project, idx) => (
+                      <VideoThumbnail 
+                        key={project.id}
+                        project={project}
+                        section={section}
+                        onClick={() => openVideoModal(project)}
+                      />
+                    ))}
                   </div>
                 )}
               </motion.div>
@@ -471,13 +444,6 @@ const WorkGallery = ({ onVideoSelect }) => {
           .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
-          }
-          
-          .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
           }
         `}</style>
       </section>
@@ -516,7 +482,7 @@ const WorkGallery = ({ onVideoSelect }) => {
               <div className="relative pb-[56.25%] h-0">
                 <iframe
                   className="absolute top-0 left-0 w-full h-full"
-                  src={`https://www.youtube.com/embed/${getYouTubeId(selectedVideo.youtubeUrl)}?autoplay=1&rel=0&modestbranding=1`}
+                  src={getEmbedUrl(selectedVideo.videoUrl, true, false)}
                   title={selectedVideo.title}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -526,7 +492,9 @@ const WorkGallery = ({ onVideoSelect }) => {
             </div>
 
             <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-sm">
-              <span className="text-zinc-400">Duration: {selectedVideo.duration}</span>
+              {selectedVideo.duration && (
+                <span className="text-zinc-400">Duration: {selectedVideo.duration}</span>
+              )}
               {selectedVideo.platform && (
                 <span className="text-zinc-400">Platform: {selectedVideo.platform}</span>
               )}

@@ -66,14 +66,14 @@ const AboutContact = () => {
   ];
 
   // Client data
-  const clients = [
-    { name: "Priya Sharma", role: "Content Creator", image: "https://randomuser.me/api/portraits/women/1.jpg", rating: 5 },
-    { name: "Rajesh Mehta", role: "Marketing Director", image: "https://randomuser.me/api/portraits/men/2.jpg", rating: 5 },
-    { name: "Anjali Verma", role: "Wedding Photographer", image: "https://randomuser.me/api/portraits/women/3.jpg", rating: 5 },
-    { name: "Vikram Singh", role: "Music Producer", image: "https://randomuser.me/api/portraits/men/4.jpg", rating: 4 },
-    { name: "Neha Gupta", role: "Digital Marketer", image: "https://randomuser.me/api/portraits/women/5.jpg", rating: 5 },
-    { name: "Arjun Reddy", role: "Film Director", image: "https://randomuser.me/api/portraits/men/6.jpg", rating: 5 },
-  ];
+const clients = [
+  { name: "Anamika", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Anamika_celokx.jpg", rating: 5 },
+  { name: "Damini", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Damini_ikoill.jpg", rating: 5 },
+  { name: "Siddharth", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Siddharth_mmoffa.jpg", rating: 5 },
+  { name: "Ayussh", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Ayussh_ovybxh.jpg", rating: 5 },
+  { name: "Isha", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Isha_anfl8y.jpg", rating: 5 },
+  { name: "Sanidhay", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861174/Sanidhay_ibzkqu.jpg", rating: 5 },
+];
 
   // Marquee data
   const column1 = [
