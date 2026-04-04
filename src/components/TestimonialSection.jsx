@@ -8,99 +8,42 @@ const TestimonialSection = () => {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.2 });
   const controls = useAnimation();
-  const [hoveredCard, setHoveredCard] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
     if (isInView) controls.start("visible");
   }, [isInView, controls]);
 
-  const categories = ["all", "Video Editing", "Motion Graphics", "Design", "Music"];
+  const categories = ["all", "Video Editing", "Motion Graphics"];
 
   const testimonials = [
     {
       id: 1,
-      name: "Priya Sharma",
-      role: "Content Creator",
-      company: "Creative Studios",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000",
-      quote: "Chandan transformed my raw footage into cinematic magic! His attention to detail and creative vision exceeded everything I imagined.",
+      name: "Anamika",
+      role: "Client",
+      company: "",
+      image: "https://res.cloudinary.com/dla8tkflq/image/upload/q_auto/f_auto/v1774861175/Anamika_celokx.jpg",
+      quote: "Working with Chandan has been an absolute pleasure. He has a remarkable ability to understand client requirements and consistently delivers high-quality work, even under tight deadlines. His editing is sharp, creative, and always aligned with the vision.",
       rating: 5,
-      project: "YouTube Content Series",
-      date: "March 2025",
+      project: "Video Editing Project",
+      date: "2024",
       category: "Video Editing",
       social: "instagram",
-      metrics: { views: "2.3M", engagement: "+45%" }
+      metrics: { views: "", engagement: "" }
     },
     {
       id: 2,
-      name: "Rajesh Mehta",
-      role: "Marketing Director",
-      company: "Digital Wave",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1000",
-      quote: "The motion graphics work was absolutely stunning! Our campaign engagement skyrocketed after working with Chandan.",
+      name: "Siddharth",
+      role: "Client",
+      company: "",
+      image: "https://res.cloudinary.com/dla8tkflq/image/upload/q_auto/f_auto/v1774861175/Siddharth_mmoffa.jpg",
+      quote: "Impressed by Chandan's motion graphics and editing skills. He delivers sharp, engaging finance content with a professional touch and strong attention to detail.",
       rating: 5,
-      project: "Social Media Campaign",
-      date: "January 2025",
+      project: "Motion Graphics Project",
+      date: "2024",
       category: "Motion Graphics",
       social: "linkedin",
-      metrics: { views: "1.8M", engagement: "+67%" }
-    },
-    {
-      id: 3,
-      name: "Anjali Verma",
-      role: "Wedding Photographer",
-      company: "Moments by Anjali",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000",
-      quote: "The wedding highlight reel brought tears to everyone's eyes. Chandan captured emotions perfectly with his editing.",
-      rating: 5,
-      project: "Wedding Highlight Reel",
-      date: "December 2024",
-      category: "Video Editing",
-      social: "instagram",
-      metrics: { views: "850K", engagement: "+32%" }
-    },
-    {
-      id: 4,
-      name: "Vikram Singh",
-      role: "Music Producer",
-      company: "Beat Factory Records",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000",
-      quote: "Perfect sync between audio and visuals! Chandan understood the music's soul and brought it to life.",
-      rating: 4.5,
-      project: "Music Video Production",
-      date: "October 2024",
-      category: "Music",
-      social: "twitter",
-      metrics: { views: "3.2M", engagement: "+89%" }
-    },
-    {
-      id: 5,
-      name: "Neha Gupta",
-      role: "Digital Marketer",
-      company: "Growth Hackers",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000",
-      quote: "Thumbnail designs that actually convert! Our CTR improved by 78% after Chandan redesigned our thumbnails.",
-      rating: 5,
-      project: "Marketing Content",
-      date: "August 2024",
-      category: "Design",
-      social: "linkedin",
-      metrics: { views: "4.5M", engagement: "+78%" }
-    },
-    {
-      id: 6,
-      name: "Arjun Reddy",
-      role: "Film Director",
-      company: "Reddy Productions",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000",
-      quote: "Chandan brings a director's perspective to editing. His understanding of storytelling and pacing is exceptional.",
-      rating: 5,
-      project: "Short Film Project",
-      date: "February 2025",
-      category: "Video Editing",
-      social: "instagram",
-      metrics: { views: "1.2M", engagement: "+56%" }
+      metrics: { views: "", engagement: "" }
     }
   ];
 
@@ -200,7 +143,7 @@ const TestimonialSection = () => {
         {/* Testimonial Grid */}
         <motion.div 
           layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 justify-items-center max-w-4xl mx-auto"
         >
           <AnimatePresence>
             {filteredTestimonials.map((testimonial, idx) => (
@@ -211,9 +154,7 @@ const TestimonialSection = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4, delay: idx * 0.05 }}
-                onHoverStart={() => setHoveredCard(testimonial.id)}
-                onHoverEnd={() => setHoveredCard(null)}
-                className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:border-blue-500/30 transition-all duration-500 hover:-translate-y-2"
+                className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:border-blue-500/30 transition-all duration-500 hover:-translate-y-2 w-full"
               >
                 {/* Quote Icon */}
                 <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-40 transition-opacity">
@@ -233,7 +174,7 @@ const TestimonialSection = () => {
                 </div>
         
                 {/* Quote Text */}
-                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 line-clamp-4">
+                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5">
                   "{testimonial.quote}"
                 </p>
         
@@ -250,27 +191,11 @@ const TestimonialSection = () => {
                   <div className="min-w-0 flex-1">
                     <h4 className="text-white font-bold text-xs sm:text-sm truncate">{testimonial.name}</h4>
                     <p className="text-zinc-500 text-[10px] sm:text-xs truncate">{testimonial.role}</p>
-                    <p className="text-blue-400 text-[8px] sm:text-[9px] font-mono truncate">{testimonial.company}</p>
+                    {testimonial.company && (
+                      <p className="text-blue-400 text-[8px] sm:text-[9px] font-mono truncate">{testimonial.company}</p>
+                    )}
                   </div>
                 </div>
-        
-                {/* Metrics Cards - Hover Reveal */}
-                <motion.div 
-                  animate={hoveredCard === testimonial.id ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="overflow-hidden"
-                >
-                  <div className="grid grid-cols-2 gap-2 pt-3 border-t border-white/10 mt-2">
-                    <div className="text-center">
-                      <div className="text-[10px] sm:text-xs font-bold text-blue-400">{testimonial.metrics.views}</div>
-                      <div className="text-[7px] sm:text-[8px] text-zinc-600 uppercase">Views</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-[10px] sm:text-xs font-bold text-green-400">{testimonial.metrics.engagement}</div>
-                      <div className="text-[7px] sm:text-[8px] text-zinc-600 uppercase">Engagement</div>
-                    </div>
-                  </div>
-                </motion.div>
         
                 {/* Project Tag */}
                 <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4">
@@ -369,13 +294,6 @@ const TestimonialSection = () => {
         
         .animation-delay-2000 {
           animation-delay: 2s;
-        }
-        
-        .line-clamp-4 {
-          display: -webkit-box;
-          -webkit-line-clamp: 4;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
         }
       `}</style>
     </section>

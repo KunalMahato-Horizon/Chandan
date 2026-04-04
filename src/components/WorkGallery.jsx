@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Smartphone, Mic, Film, X, ChevronLeft, ChevronRight as ChevronRightIcon, Award } from "lucide-react";
+import { Play, Smartphone, Mic, Film, X, ChevronLeft, ChevronRight as ChevronRightIcon, Award, Loader2 } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
 
 const WorkGallery = ({ onVideoSelect }) => {
@@ -62,12 +62,12 @@ const WorkGallery = ({ onVideoSelect }) => {
   const getEmbedUrl = (url, autoplay = true, muted = true) => {
     const youtubeId = getYouTubeId(url);
     if (youtubeId) {
-      return `https://www.youtube.com/embed/${youtubeId}?autoplay=${autoplay ? 1 : 0}&mute=${muted ? 1 : 0}&loop=1&playlist=${youtubeId}&controls=0&modestbranding=1&rel=0`;
+      return `https://www.youtube.com/embed/${youtubeId}?autoplay=${autoplay ? 1 : 0}&mute=${muted ? 1 : 0}&loop=1&playlist=${youtubeId}&controls=0&modestbranding=1&rel=0&enablejsapi=1`;
     }
     
     const vimeoId = getVimeoId(url);
     if (vimeoId) {
-      return `https://player.vimeo.com/video/${vimeoId}?autoplay=${autoplay ? 1 : 0}&muted=${muted ? 1 : 0}&loop=1&controls=0&title=0&byline=0&portrait=0&background=1`;
+      return `https://player.vimeo.com/video/${vimeoId}?autoplay=${autoplay ? 1 : 0}&muted=${muted ? 1 : 0}&loop=1&controls=0&title=0&byline=0&portrait=0&background=1&dnt=1`;
     }
     
     return null;
@@ -86,16 +86,22 @@ const WorkGallery = ({ onVideoSelect }) => {
       layout: "scroll",
       projects: [
         { 
+          title: "New Portfolio Reel", 
+          desc: "Latest showcase edit", 
+          videoUrl: "https://drive.google.com/file/d/1MBzi7sjmJIC1gECDIn61YD64YsCu7Z10/view?usp=sharing",
+          id: "v1",
+        },
+        { 
           title: "Science Space Edit", 
           desc: "A cosmic journey through science and space visuals", 
           videoUrl: "https://vimeo.com/1064950967?fl=ip&fe=ec",
-          id: "v1",
+          id: "v2",
         },
         { 
           title: "The Story of Malla", 
           desc: "A compelling narrative about Malla's journey", 
           videoUrl: "https://vimeo.com/1064718151?fl=ip&fe=ec",
-          id: "v2",
+          id: "v3",
         },
       ]
     },
@@ -172,41 +178,95 @@ const WorkGallery = ({ onVideoSelect }) => {
     }
   };
 
-  // Component for Reels with actual video playback
+  // Component for Reels with lazy loading and loading states
   const ReelVideo = ({ project, section, onClick }) => {
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isIframeLoaded, setIsIframeLoaded] = useState(false);
     const videoRef = useRef(null);
+    const containerRef = useRef(null);
+    const [isInView, setIsInView] = useState(false);
+    
+    // Intersection Observer for lazy loading
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setIsInView(true);
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: "200px" }
+      );
+      
+      if (containerRef.current) {
+        observer.observe(containerRef.current);
+      }
+      
+      return () => observer.disconnect();
+    }, []);
     
     useEffect(() => {
-      if (videoRef.current && isPlaying) {
+      if (videoRef.current && isPlaying && isIframeLoaded) {
         videoRef.current.contentWindow?.postMessage('{"method":"play"}', '*');
-      } else if (videoRef.current && !isPlaying) {
+      } else if (videoRef.current && !isPlaying && isIframeLoaded) {
         videoRef.current.contentWindow?.postMessage('{"method":"pause"}', '*');
       }
-    }, [isPlaying]);
+    }, [isPlaying, isIframeLoaded]);
+    
+    const handleIframeLoad = () => {
+      setIsIframeLoaded(true);
+    };
+    
+    const handleMouseEnter = () => {
+      if (isIframeLoaded) {
+        setIsPlaying(true);
+      }
+    };
     
     return (
       <div 
+        ref={containerRef}
         className={`group relative rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 cursor-pointer aspect-[9/16]`}
-        onMouseEnter={() => setIsPlaying(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setIsPlaying(false)}
         onClick={onClick}
       >
-        {/* Vimeo Embed */}
-        <iframe
-          ref={videoRef}
-          src={getEmbedUrl(project.videoUrl, true, true)}
-          className="absolute inset-0 w-full h-full"
-          frameBorder="0"
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowFullScreen
-          title={project.title}
-        />
+        {/* Loading State */}
+        {!isIframeLoaded && isInView && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-zinc-900 to-black z-10">
+            <Loader2 size={32} className="text-blue-500 animate-spin mb-3" />
+            <p className="text-zinc-500 text-xs font-mono">Loading video...</p>
+          </div>
+        )}
+        
+        {/* Thumbnail Placeholder */}
+        {!isIframeLoaded && !isInView && (
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20 flex items-center justify-center">
+            <Play size={32} className="text-white/40" />
+          </div>
+        )}
+        
+        {/* Lazy-loaded Iframe */}
+        {isInView && (
+          <iframe
+            ref={videoRef}
+            src={getEmbedUrl(project.videoUrl, true, true)}
+            className="absolute inset-0 w-full h-full"
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+            title={project.title}
+            onLoad={handleIframeLoad}
+            loading="lazy"
+          />
+        )}
         
         {/* Overlay with Title (visible on hover) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20" />
         
-        <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+        <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-20">
           <h4 className="text-sm sm:text-base font-black uppercase tracking-tight text-white">
             {project.title}
           </h4>
@@ -216,13 +276,13 @@ const WorkGallery = ({ onVideoSelect }) => {
         </div>
         
         {/* Play Button Overlay on Click */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40">
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40 z-20">
           <div className="bg-red-600 rounded-full p-3 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
             <Play size={24} className="text-white" fill="white" />
           </div>
         </div>
         
-        <div className={`absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b ${section.color} transition-all duration-500`} />
+        <div className={`absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b ${section.color} transition-all duration-500 z-20`} />
       </div>
     );
   };
@@ -230,6 +290,7 @@ const WorkGallery = ({ onVideoSelect }) => {
   // Component for regular video thumbnails (podcast, documentary)
   const VideoThumbnail = ({ project, section, onClick }) => {
     const [imgError, setImgError] = useState(false);
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
     const videoId = getYouTubeId(project.videoUrl) || getVimeoId(project.videoUrl);
     const fallbackUrl = project.thumbnail || (videoId ? `https://via.placeholder.com/300x400?text=${encodeURIComponent(project.title)}` : null);
     
@@ -239,11 +300,22 @@ const WorkGallery = ({ onVideoSelect }) => {
           ? 'aspect-[9/16]'
           : 'aspect-video'
       }`} onClick={onClick}>
+        {/* Loading State for Image */}
+        {!isImageLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
+            <Loader2 size={24} className="text-blue-500 animate-spin" />
+          </div>
+        )}
+        
         <img 
           src={!imgError ? (project.thumbnail || fallbackUrl) : fallbackUrl}
           alt={project.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 opacity-90 group-hover:opacity-100" 
+          className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700 opacity-90 group-hover:opacity-100 ${
+            isImageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
           onError={() => setImgError(true)}
+          onLoad={() => setIsImageLoaded(true)}
+          loading="lazy"
         />
         
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40">
