@@ -65,15 +65,18 @@ const AboutContact = () => {
     { name: "Animations", level: 4, icon: <PenTool size={12} /> },
   ];
 
-  // Client data
-const clients = [
-  { name: "Anamika", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Anamika_celokx.jpg", rating: 5 },
-  { name: "Damini", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Damini_ikoill.jpg", rating: 5 },
-  { name: "Siddharth", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Siddharth_mmoffa.jpg", rating: 5 },
-  { name: "Ayussh", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Ayussh_ovybxh.jpg", rating: 5 },
-  { name: "Isha", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Isha_anfl8y.jpg", rating: 5 },
-  { name: "Sanidhay", role: "Client", image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861174/Sanidhay_ibzkqu.jpg", rating: 5 },
-];
+  // Clients - only images and ratings, simple
+  const clients = [
+    { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Anamika_celokx.jpg", rating: 5 },
+    { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Damini_ikoill.jpg", rating: 5 },
+    { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Siddharth_mmoffa.jpg", rating: 5 },
+    { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Ayussh_ovybxh.jpg", rating: 5 },
+    { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Isha_anfl8y.jpg", rating: 5 },
+    { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861174/Sanidhay_ibzkqu.jpg", rating: 5 },
+    // Two new images
+    { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1777394676/Client_xrrjvh.jpg", rating: 5 },
+    { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1777394675/Client-2_zstha5.jpg", rating: 5 },
+  ];
 
   // Marquee data
   const column1 = [
@@ -497,7 +500,7 @@ const clients = [
               </div>
             </div>
 
-            {/* Clients Section - New */}
+            {/* Clients Section - Simple, only images and stars */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -513,7 +516,7 @@ const clients = [
                 <span className="text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Trusted By</span>
               </div>
               
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
                 {clients.map((client, idx) => (
                   <motion.div
                     key={idx}
@@ -526,15 +529,14 @@ const clients = [
                     <div className="relative w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2">
                       <img 
                         src={client.image} 
-                        alt={client.name}
+                        alt="Client"
                         className="w-full h-full rounded-full object-cover border-2 border-blue-500/30 group-hover:border-blue-500 transition-all"
                       />
                       <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-0.5">
                         <Star size={6} className="text-white fill-white sm:w-2 sm:h-2" />
                       </div>
                     </div>
-                    <h4 className="text-[10px] sm:text-xs font-bold text-white truncate">{client.name}</h4>
-                    <p className="text-[8px] sm:text-[9px] text-zinc-500 truncate">{client.role}</p>
+                    {/* Only stars - no name, no role */}
                     <div className="flex items-center justify-center gap-0.5 mt-1">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} size={8} className={i < client.rating ? "text-yellow-500 fill-yellow-500" : "text-zinc-600"} />
