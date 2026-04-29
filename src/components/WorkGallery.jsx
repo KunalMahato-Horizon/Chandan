@@ -100,6 +100,21 @@ const WorkGallery = ({ onVideoSelect }) => {
     },
   ];
 
+  // New Long Form video
+  const longFormProjects = [
+    { 
+      title: "The Future of Everything",
+      desc: "A deep dive into emerging technologies and their impact on society",
+      embedUrl: "https://www.youtube-nocookie.com/embed/vi1IMVtFcBw?si=wn_dOLXQ0TuRbziF&controls=0&start=1",
+      thumbnail: "https://img.youtube.com/vi/vi1IMVtFcBw/maxresdefault.jpg",
+      id: "l1",
+      duration: "45:22",
+      role: "Lead Editor & Producer",
+      award: "Best Documentary 2024",
+      type: "youtube"
+    }
+  ];
+
   const sections = [
     {
       id: "shorts",
@@ -182,6 +197,18 @@ const WorkGallery = ({ onVideoSelect }) => {
           type: "youtube"
         },
       ]
+    },
+    {
+      id: "longform",
+      title: "Long Form",
+      icon: <Film size={18} />,
+      description: "In-depth cinematic features and documentary series",
+      color: "from-emerald-500/20",
+      borderColor: "border-emerald-500/20",
+      accentColor: "emerald",
+      aspectRatio: "landscape",
+      layout: "grid",
+      projects: longFormProjects
     }
   ];
 
