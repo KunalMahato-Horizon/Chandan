@@ -38,53 +38,54 @@ const WorkGallery = ({ onVideoSelect }) => {
   };
 
   // Updated shorts/reels with new Cloudinary URLs and Vimeo video
+
   const shortsProjects = [
-    { 
-      title: "INDIGO 5", 
-      desc: "A visual journey through India's vibrant culture and colors", 
-      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442436/INDIGO_5_o4lizq.mp4",
-      id: "v1",
-      type: "cloudinary"
-    },
-    { 
-      title: "NCERT Insights", 
-      desc: "Educational content reimagined for modern learners", 
-      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442337/_NCERT_2_x0fguv.mp4",
-      id: "v2",
-      type: "cloudinary"
-    },
-    { 
-      title: "Snoring Solutions", 
-      desc: "Medical awareness content with engaging visualization", 
-      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442232/Snoring_final_video_vslifz.mp4",
-      id: "v3",
-      type: "cloudinary"
-    },
-    { 
-      title: "Garba Nights", 
-      desc: "Celebrating the vibrant tradition of Garba dance", 
-      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442055/Garba_npfwje.mp4",
-      id: "v4",
-      type: "cloudinary"
-    },
-    { 
-      title: "Zepto Stories", 
-      desc: "Quick commerce revolution in modern India", 
-      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777441899/Zepto_ca4c5z.mp4",
-      id: "v5",
-      type: "cloudinary"
-    },
     { 
       title: "True Cost of Support Roles", 
       desc: "An insightful look into the real impact of support positions", 
       videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777429295/The_True_Cost_of_Support_Roles_ciwdrj.mp4",
-      id: "v6",
+      id: "v1",
       type: "cloudinary"
     },
     { 
       title: "Why Dubai is Rich", 
       desc: "A cinematic journey through Dubai's wealth and prosperity", 
       videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777429204/Why_Dubai_is_Rich_n0pkjw.mp4",
+      id: "v2",
+      type: "cloudinary"
+    },
+    { 
+      title: "Zepto Stories", 
+      desc: "Quick commerce revolution in modern India", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777441899/Zepto_ca4c5z.mp4",
+      id: "v3",
+      type: "cloudinary"
+    },
+    { 
+      title: "INDIGO 5", 
+      desc: "A visual journey through India's vibrant culture and colors", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442436/INDIGO_5_o4lizq.mp4",
+      id: "v4",
+      type: "cloudinary"
+    },
+    { 
+      title: "NCERT Insights", 
+      desc: "Educational content reimagined for modern learners", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442337/_NCERT_2_x0fguv.mp4",
+      id: "v5",
+      type: "cloudinary"
+    },
+    { 
+      title: "Snoring Solutions", 
+      desc: "Medical awareness content with engaging visualization", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442232/Snoring_final_video_vslifz.mp4",
+      id: "v6",
+      type: "cloudinary"
+    },
+    { 
+      title: "Garba Nights", 
+      desc: "Celebrating the vibrant tradition of Garba dance", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442055/Garba_npfwje.mp4",
       id: "v7",
       type: "cloudinary"
     },
