@@ -1,32 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Smartphone, Mic, Film, X, ChevronLeft, ChevronRight as ChevronRightIcon, Award, Loader2 } from "lucide-react";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { Play, Smartphone, Mic, Film, ChevronLeft, ChevronRight as ChevronRightIcon, Award, Loader2 } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 
 const WorkGallery = ({ onVideoSelect }) => {
-  const [selectedVideo, setSelectedVideo] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [playingVideoId, setPlayingVideoId] = useState(null);
   const scrollContainerRef = useRef(null);
-
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-    setSelectedVideo(null);
-  }, []);
-
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') closeModal();
-    };
-    if (isModalOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isModalOpen, closeModal]);
+  const videoRefs = useRef({});
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -42,8 +23,62 @@ const WorkGallery = ({ onVideoSelect }) => {
 
   // Get Cloudinary thumbnail URL
   const getCloudinaryThumbnail = (videoUrl) => {
-    return videoUrl.replace('.mp4', '.jpg');
+    if (!videoUrl) return '';
+    return videoUrl.replace(/\.mp4$/, '.jpg').replace('/video/upload/', '/video/upload/');
   };
+
+  // Updated shorts/reels with new Cloudinary URLs
+  const shortsProjects = [
+    { 
+      title: "INDIGO 5", 
+      desc: "A visual journey through India's vibrant culture and colors", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442436/INDIGO_5_o4lizq.mp4",
+      id: "v1",
+      type: "cloudinary"
+    },
+    { 
+      title: "NCERT Insights", 
+      desc: "Educational content reimagined for modern learners", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442337/_NCERT_2_x0fguv.mp4",
+      id: "v2",
+      type: "cloudinary"
+    },
+    { 
+      title: "Snoring Solutions", 
+      desc: "Medical awareness content with engaging visualization", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442232/Snoring_final_video_vslifz.mp4",
+      id: "v3",
+      type: "cloudinary"
+    },
+    { 
+      title: "Garba Nights", 
+      desc: "Celebrating the vibrant tradition of Garba dance", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777442055/Garba_npfwje.mp4",
+      id: "v4",
+      type: "cloudinary"
+    },
+    { 
+      title: "Zepto Stories", 
+      desc: "Quick commerce revolution in modern India", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777441899/Zepto_ca4c5z.mp4",
+      id: "v5",
+      type: "cloudinary"
+    },
+    { 
+      title: "True Cost of Support Roles", 
+      desc: "An insightful look into the real impact of support positions", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777429295/The_True_Cost_of_Support_Roles_ciwdrj.mp4",
+      id: "v6",
+      type: "cloudinary"
+    },
+    { 
+      title: "Why Dubai is Rich", 
+      desc: "A cinematic journey through Dubai's wealth and prosperity", 
+      videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777429204/Why_Dubai_is_Rich_n0pkjw.mp4",
+      id: "v7",
+      type: "cloudinary"
+    },
+  ];
 
   const sections = [
     {
@@ -56,20 +91,7 @@ const WorkGallery = ({ onVideoSelect }) => {
       accentColor: "blue",
       aspectRatio: "portrait",
       layout: "scroll",
-      projects: [
-        { 
-          title: "Why Dubai is Rich", 
-          desc: "A cinematic journey through Dubai's wealth and prosperity", 
-          videoUrl: "https://res.cloudinary.com/dla8tkflq/video/upload/v1777394866/Why_Dubai_is_Rich_x1qfuw.mp4",
-          id: "v1",
-        },
-        { 
-          title: "The True Cost of Support Roles", 
-          desc: "An insightful look into the real impact of support positions", 
-          videoUrl: "https://res.cloudinary.com/dla8tkflq/video/upload/v1777395496/The_True_Cost_of_Support_Roles_icxbbh.mp4",
-          id: "v2",
-        },
-      ]
+      projects: shortsProjects
     },
     {
       id: "podcast",
@@ -85,18 +107,22 @@ const WorkGallery = ({ onVideoSelect }) => {
         { 
           title: "Vastu For Home",
           videoUrl: "https://youtu.be/SrUJ4hiGYtQ",
+          embedUrl: "https://www.youtube-nocookie.com/embed/SrUJ4hiGYtQ?si=MzCHYdCcQ1OSN_Ck",
           thumbnail: "https://img.youtube.com/vi/SrUJ4hiGYtQ/maxresdefault.jpg",
           id: "p1",
           duration: "15:30",
           platform: "YouTube",
+          type: "youtube"
         },
         { 
           title: "96 Rules of Eating", 
           videoUrl: "https://youtu.be/6PiQF6p8mV0",
+          embedUrl: "https://www.youtube-nocookie.com/embed/6PiQF6p8mV0?si=3rwsFs1lUKJ4bzdI",
           thumbnail: "https://img.youtube.com/vi/6PiQF6p8mV0/maxresdefault.jpg",
           id: "p2",
           duration: "22:45",
           platform: "YouTube",
+          type: "youtube"
         },
       ]
     },
@@ -115,40 +141,74 @@ const WorkGallery = ({ onVideoSelect }) => {
           title: "The Alpine Doc", 
           desc: "Mountain expedition film", 
           videoUrl: "https://youtu.be/drqDLNmihkw",
+          embedUrl: "https://www.youtube-nocookie.com/embed/drqDLNmihkw?si=csHLcoe2VveCKy42&start=4",
           thumbnail: "https://img.youtube.com/vi/drqDLNmihkw/maxresdefault.jpg",
           id: "d1",
           duration: "22:15",
           role: "Editor & Colorist",
-          award: "Film Fest Finalist"
+          award: "Film Fest Finalist",
+          type: "youtube"
         },
         { 
           title: "Urban Nomads", 
           desc: "City life documentary", 
           videoUrl: "https://youtu.be/ezYCsECGbG0",
+          embedUrl: "https://www.youtube-nocookie.com/embed/ezYCsECGbG0?si=PIS1KtlLURk22XQR",
           thumbnail: "https://img.youtube.com/vi/ezYCsECGbG0/maxresdefault.jpg",
           id: "d2",
           duration: "34:40",
           role: "Lead Editor",
-          award: "Official Selection"
+          award: "Official Selection",
+          type: "youtube"
         },
       ]
     }
   ];
 
-  const openVideoModal = (project) => {
-    setSelectedVideo(project);
-    setIsModalOpen(true);
-    if (onVideoSelect) {
-      onVideoSelect(project.id, project.title);
+  const handleVideoClick = (projectId, type) => {
+    if (playingVideoId === projectId) {
+      // If same video is clicked, pause/stop it
+      if (type === 'cloudinary' && videoRefs.current[projectId]) {
+        videoRefs.current[projectId].pause();
+      }
+      setPlayingVideoId(null);
+    } else {
+      // Stop any currently playing video
+      if (playingVideoId && videoRefs.current[playingVideoId]) {
+        if (sections.some(s => s.projects.find(p => p.id === playingVideoId && p.type === 'cloudinary'))) {
+          videoRefs.current[playingVideoId].pause();
+        }
+      }
+      setPlayingVideoId(projectId);
     }
   };
 
-  // Cloudinary Video Component
-  const CloudinaryVideo = ({ project, section, onClick }) => {
+  // Cloudinary Video Component (Inline Playback)
+  const CloudinaryVideo = ({ project, section, isPlaying, onClick }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isInView, setIsInView] = useState(false);
+    const [hasError, setHasError] = useState(false);
     const videoRef = useRef(null);
     const containerRef = useRef(null);
+    
+    // Store video ref in parent ref object
+    useEffect(() => {
+      if (videoRef.current) {
+        videoRefs.current[project.id] = videoRef.current;
+      }
+      return () => {
+        delete videoRefs.current[project.id];
+      };
+    }, [project.id]);
+    
+    // Handle autoplay when playing state changes
+    useEffect(() => {
+      if (isPlaying && videoRef.current && !hasError) {
+        videoRef.current.play().catch(e => console.log("Play prevented:", e));
+      } else if (!isPlaying && videoRef.current) {
+        videoRef.current.pause();
+      }
+    }, [isPlaying, hasError]);
     
     useEffect(() => {
       const observer = new IntersectionObserver(
@@ -165,113 +225,156 @@ const WorkGallery = ({ onVideoSelect }) => {
       return () => observer.disconnect();
     }, []);
     
-    useEffect(() => {
-      if (videoRef.current && isLoaded && isInView) {
-        videoRef.current.play().catch(e => console.log("Autoplay prevented:", e));
-      }
-    }, [isLoaded, isInView]);
+    const handleVideoError = () => {
+      setHasError(true);
+      setIsLoaded(true);
+    };
+    
+    const thumbnailUrl = getCloudinaryThumbnail(project.videoUrl);
     
     return (
       <div 
         ref={containerRef}
         className={`group relative rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 cursor-pointer aspect-[9/16]`}
-        onClick={onClick}
+        onClick={() => onClick(project.id, project.type)}
       >
-        {!isLoaded && isInView && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
-            <Loader2 size={32} className="text-blue-500 animate-spin" />
-          </div>
+        {!isPlaying && (
+          <>
+            {(!isLoaded || !isInView) && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
+                <Loader2 size={32} className="text-blue-500 animate-spin" />
+              </div>
+            )}
+            
+            {hasError && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900 z-10">
+                <Film size={32} className="text-zinc-600 mb-2" />
+                <p className="text-xs text-zinc-500">Video unavailable</p>
+              </div>
+            )}
+            
+            {isInView && !hasError && (
+              <video
+                ref={videoRef}
+                className="absolute inset-0 w-full h-full object-cover"
+                poster={thumbnailUrl}
+                muted
+                playsInline
+                preload="metadata"
+                onLoadedData={() => setIsLoaded(true)}
+                onError={handleVideoError}
+              >
+                <source src={project.videoUrl} type="video/mp4" />
+              </video>
+            )}
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20" />
+            
+            <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-20">
+              <h4 className="text-sm sm:text-base font-black uppercase tracking-tight text-white">{project.title}</h4>
+              <p className="text-[10px] sm:text-xs text-zinc-300 mt-1 font-mono">{project.desc}</p>
+            </div>
+            
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40 z-20">
+              <div className="bg-red-600 rounded-full p-3 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
+                <Play size={24} className="text-white" fill="white" />
+              </div>
+            </div>
+          </>
         )}
         
-        {isInView && (
+        {isPlaying && !hasError && (
           <video
             ref={videoRef}
             className="absolute inset-0 w-full h-full object-cover"
-            poster={getCloudinaryThumbnail(project.videoUrl)}
-            loop
-            muted
+            controls
+            autoPlay
             playsInline
-            preload="auto"
-            onLoadedData={() => setIsLoaded(true)}
+            poster={thumbnailUrl}
+            onError={handleVideoError}
           >
             <source src={project.videoUrl} type="video/mp4" />
           </video>
         )}
-        
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20" />
-        
-        <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-20">
-          <h4 className="text-sm sm:text-base font-black uppercase tracking-tight text-white">{project.title}</h4>
-          <p className="text-[10px] sm:text-xs text-zinc-300 mt-1 font-mono">{project.desc}</p>
-        </div>
-        
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40 z-20">
-          <div className="bg-red-600 rounded-full p-3 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
-            <Play size={24} className="text-white" fill="white" />
-          </div>
-        </div>
         
         <div className={`absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b ${section.color} transition-all duration-500 z-20`} />
       </div>
     );
   };
 
-  // YouTube/Vimeo Thumbnail Component
-  const VideoThumbnail = ({ project, section, onClick }) => {
+  // YouTube Video Component (Inline Playback)
+  const YouTubeVideo = ({ project, section, isPlaying, onClick }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     
     return (
-      <div className={`group relative rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 cursor-pointer hover:shadow-2xl aspect-video`} onClick={onClick}>
-        {!isImageLoaded && (
-          <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
-            <Loader2 size={24} className="text-blue-500 animate-spin" />
-          </div>
-        )}
-        
-        <img 
-          src={project.thumbnail}
-          alt={project.title}
-          className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700 opacity-90 group-hover:opacity-100 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={() => setIsImageLoaded(true)}
-          loading="lazy"
-        />
-        
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40">
-          <div className="bg-red-600 rounded-full p-3 sm:p-4 md:p-5 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
-            <Play size={24} className="text-white" fill="white" />
-          </div>
-        </div>
-        
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-100" />
-        
-        <div className="absolute inset-0 p-4 sm:p-5 md:p-6 flex flex-col justify-between">
-          <div className="flex justify-between items-start">
-            {project.duration && (
-              <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-white bg-black/60 backdrop-blur-sm px-2 sm:px-2.5 md:px-3 py-1 rounded-full border border-white/10 uppercase tracking-widest">
-                {project.duration}
-              </span>
-            )}
-            {project.award && (
-              <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-amber-400 bg-black/60 backdrop-blur-sm px-2 sm:px-2.5 md:px-3 py-1 rounded-full border border-amber-500/20 flex items-center gap-1">
-                <Award size={10} />
-                {project.award}
-              </span>
-            )}
-          </div>
-
-          <div>
-            <h4 className="text-sm sm:text-base md:text-lg font-black uppercase tracking-tight text-white drop-shadow-lg">
-              {project.title}
-            </h4>
-            <p className="text-[10px] sm:text-xs text-zinc-300 mt-1 font-mono">{project.desc}</p>
-            {project.role && (
-              <div className="flex items-center gap-2 mt-2 text-[8px] sm:text-[9px] text-zinc-400">
-                <span className="text-zinc-500">{project.role}</span>
+      <div 
+        className={`group relative rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 cursor-pointer hover:shadow-2xl aspect-video`} 
+        onClick={() => onClick(project.id, project.type)}
+      >
+        {!isPlaying ? (
+          <>
+            {!isImageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
+                <Loader2 size={24} className="text-blue-500 animate-spin" />
               </div>
             )}
-          </div>
-        </div>
+            
+            <img 
+              src={project.thumbnail}
+              alt={project.title}
+              className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700 opacity-90 group-hover:opacity-100 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              onLoad={() => setIsImageLoaded(true)}
+              loading="lazy"
+            />
+            
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40">
+              <div className="bg-red-600 rounded-full p-3 sm:p-4 md:p-5 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
+                <Play size={24} className="text-white" fill="white" />
+              </div>
+            </div>
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-100" />
+            
+            <div className="absolute inset-0 p-4 sm:p-5 md:p-6 flex flex-col justify-between">
+              <div className="flex justify-between items-start">
+                {project.duration && (
+                  <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-white bg-black/60 backdrop-blur-sm px-2 sm:px-2.5 md:px-3 py-1 rounded-full border border-white/10 uppercase tracking-widest">
+                    {project.duration}
+                  </span>
+                )}
+                {project.award && (
+                  <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-amber-400 bg-black/60 backdrop-blur-sm px-2 sm:px-2.5 md:px-3 py-1 rounded-full border border-amber-500/20 flex items-center gap-1">
+                    <Award size={10} />
+                    {project.award}
+                  </span>
+                )}
+              </div>
 
+              <div>
+                <h4 className="text-sm sm:text-base md:text-lg font-black uppercase tracking-tight text-white drop-shadow-lg">
+                  {project.title}
+                </h4>
+                <p className="text-[10px] sm:text-xs text-zinc-300 mt-1 font-mono">{project.desc}</p>
+                {project.role && (
+                  <div className="flex items-center gap-2 mt-2 text-[8px] sm:text-[9px] text-zinc-400">
+                    <span className="text-zinc-500">{project.role}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <iframe
+            className="absolute inset-0 w-full h-full"
+            src={`${project.embedUrl}?autoplay=1&rel=0&modestbranding=1`}
+            title={project.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        )}
+        
         <div className={`absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b ${section.color} transition-all duration-500`} />
       </div>
     );
@@ -336,18 +439,31 @@ const WorkGallery = ({ onVideoSelect }) => {
 
                 {section.id === "shorts" ? (
                   <div className="relative mt-6">
-                    <button onClick={scrollLeft} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all hover:scale-110">
+                    <button 
+                      onClick={scrollLeft} 
+                      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all hover:scale-110"
+                      aria-label="Scroll left"
+                    >
                       <ChevronLeft size={18} className="text-white" />
                     </button>
-                    <button onClick={scrollRight} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all hover:scale-110">
+                    <button 
+                      onClick={scrollRight} 
+                      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all hover:scale-110"
+                      aria-label="Scroll right"
+                    >
                       <ChevronRightIcon size={18} className="text-white" />
                     </button>
 
                     <div ref={scrollContainerRef} className="overflow-x-auto scrollbar-hide pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                       <div className="flex gap-5 sm:gap-6 md:gap-7">
-                        {section.projects.map((project, idx) => (
+                        {section.projects.map((project) => (
                           <div key={project.id} className="flex-shrink-0 w-[260px] sm:w-[280px] md:w-[300px]">
-                            <CloudinaryVideo project={project} section={section} onClick={() => openVideoModal(project)} />
+                            <CloudinaryVideo 
+                              project={project} 
+                              section={section} 
+                              isPlaying={playingVideoId === project.id}
+                              onClick={handleVideoClick}
+                            />
                           </div>
                         ))}
                       </div>
@@ -356,7 +472,13 @@ const WorkGallery = ({ onVideoSelect }) => {
                 ) : (
                   <div className={`grid gap-4 sm:gap-5 md:gap-6 mt-4 sm:mt-5 md:mt-6 grid-cols-1 lg:grid-cols-2`}>
                     {section.projects.map((project) => (
-                      <VideoThumbnail key={project.id} project={project} section={section} onClick={() => openVideoModal(project)} />
+                      <YouTubeVideo 
+                        key={project.id} 
+                        project={project} 
+                        section={section} 
+                        isPlaying={playingVideoId === project.id}
+                        onClick={handleVideoClick}
+                      />
                     ))}
                   </div>
                 )}
@@ -370,49 +492,6 @@ const WorkGallery = ({ onVideoSelect }) => {
           .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         `}</style>
       </section>
-
-      {/* Video Modal */}
-      {isModalOpen && selectedVideo && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-md"
-          onClick={closeModal}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-5xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button onClick={closeModal} className="absolute -top-12 right-0 sm:-right-12 sm:top-0 p-2 text-white/70 hover:text-white transition-colors z-10">
-              <X size={24} />
-            </button>
-
-            <div className="mb-4 text-center">
-              <h3 className="text-xl sm:text-2xl font-bold text-white">{selectedVideo.title}</h3>
-              <p className="text-sm text-zinc-400 mt-1">{selectedVideo.desc}</p>
-            </div>
-
-            <div className="relative w-full bg-black rounded-xl overflow-hidden shadow-2xl">
-              <div className="relative pb-[56.25%] h-0">
-                <video
-                  className="absolute top-0 left-0 w-full h-full"
-                  controls
-                  autoPlay
-                  playsInline
-                  poster={getCloudinaryThumbnail(selectedVideo.videoUrl)}
-                >
-                  <source src={selectedVideo.videoUrl} type="video/mp4" />
-                </video>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
     </>
   );
 };
