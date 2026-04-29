@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Smartphone, Mic, Film, ChevronLeft, ChevronRight as ChevronRightIcon, Award, Loader2 } from "lucide-react";
+import { Play, Smartphone, Mic, Film, ChevronLeft, ChevronRight as ChevronRightIcon, Award, Loader2, Volume2, VolumeX } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 const WorkGallery = ({ onVideoSelect }) => {
   const [playingVideoId, setPlayingVideoId] = useState(null);
+  const [mutedVideos, setMutedVideos] = useState({});
   const scrollContainerRef = useRef(null);
   const videoRefs = useRef({});
 
@@ -27,7 +28,16 @@ const WorkGallery = ({ onVideoSelect }) => {
     return videoUrl.replace(/\.mp4$/, '.jpg').replace('/video/upload/', '/video/upload/');
   };
 
-  // Updated shorts/reels with new Cloudinary URLs
+  // Toggle mute for a specific video
+  const toggleMute = (videoId, e) => {
+    e.stopPropagation();
+    setMutedVideos(prev => ({
+      ...prev,
+      [videoId]: !prev[videoId]
+    }));
+  };
+
+  // Updated shorts/reels with new Cloudinary URLs and Vimeo video
   const shortsProjects = [
     { 
       title: "INDIGO 5", 
@@ -77,6 +87,15 @@ const WorkGallery = ({ onVideoSelect }) => {
       videoUrl: "https://res.cloudinary.com/dkbp9awk3/video/upload/q_auto/f_auto/v1777429204/Why_Dubai_is_Rich_n0pkjw.mp4",
       id: "v7",
       type: "cloudinary"
+    },
+    { 
+      title: "Vimeo Showcase", 
+      desc: "Exclusive content from Vimeo", 
+      videoUrl: "https://vimeo.com/1064950967",
+      embedUrl: "https://player.vimeo.com/video/1064950967",
+      thumbnail: "https://vumbnail.com/1064950967.jpg",
+      id: "v8",
+      type: "vimeo"
     },
   ];
 
@@ -167,7 +186,7 @@ const WorkGallery = ({ onVideoSelect }) => {
 
   const handleVideoClick = (projectId, type) => {
     if (playingVideoId === projectId) {
-      // If same video is clicked, pause/stop it
+      // If same video is clicked, stop it
       if (type === 'cloudinary' && videoRefs.current[projectId]) {
         videoRefs.current[projectId].pause();
       }
@@ -183,13 +202,16 @@ const WorkGallery = ({ onVideoSelect }) => {
     }
   };
 
-  // Cloudinary Video Component (Inline Playback)
+  // Cloudinary Video Component (Autoplay on scroll)
   const CloudinaryVideo = ({ project, section, isPlaying, onClick }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isInView, setIsInView] = useState(false);
     const [hasError, setHasError] = useState(false);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(false);
     const videoRef = useRef(null);
     const containerRef = useRef(null);
+    
+    const isMuted = mutedVideos[project.id] !== undefined ? mutedVideos[project.id] : true;
     
     // Store video ref in parent ref object
     useEffect(() => {
@@ -201,24 +223,49 @@ const WorkGallery = ({ onVideoSelect }) => {
       };
     }, [project.id]);
     
-    // Handle autoplay when playing state changes
+    // Handle autoplay when video comes into view
+    useEffect(() => {
+      if (isInView && videoRef.current && !hasError && !isPlaying) {
+        videoRef.current.muted = isMuted;
+        videoRef.current.play()
+          .then(() => {
+            setIsAutoPlaying(true);
+          })
+          .catch(e => console.log("Autoplay prevented:", e));
+      } else if (!isInView && videoRef.current && isAutoPlaying && !isPlaying) {
+        videoRef.current.pause();
+        setIsAutoPlaying(false);
+      }
+    }, [isInView, hasError, isPlaying, isMuted, isAutoPlaying]);
+    
+    // Handle playing state (when clicked)
     useEffect(() => {
       if (isPlaying && videoRef.current && !hasError) {
+        videoRef.current.muted = false;
         videoRef.current.play().catch(e => console.log("Play prevented:", e));
-      } else if (!isPlaying && videoRef.current) {
+        setIsAutoPlaying(false);
+      } else if (!isPlaying && videoRef.current && !isAutoPlaying) {
         videoRef.current.pause();
       }
-    }, [isPlaying, hasError]);
+    }, [isPlaying, hasError, isAutoPlaying]);
+    
+    // Update mute state
+    useEffect(() => {
+      if (videoRef.current) {
+        videoRef.current.muted = isMuted;
+      }
+    }, [isMuted]);
     
     useEffect(() => {
       const observer = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
             setIsInView(true);
-            observer.disconnect();
+          } else {
+            setIsInView(false);
           }
         },
-        { threshold: 0.1, rootMargin: "100px" }
+        { threshold: 0.5, rootMargin: "50px" }
       );
       
       if (containerRef.current) observer.observe(containerRef.current);
@@ -238,36 +285,49 @@ const WorkGallery = ({ onVideoSelect }) => {
         className={`group relative rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 cursor-pointer aspect-[9/16]`}
         onClick={() => onClick(project.id, project.type)}
       >
-        {!isPlaying && (
+        {(!isLoaded || !isInView) && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
+            <Loader2 size={32} className="text-blue-500 animate-spin" />
+          </div>
+        )}
+        
+        {hasError && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900 z-10">
+            <Film size={32} className="text-zinc-600 mb-2" />
+            <p className="text-xs text-zinc-500">Video unavailable</p>
+          </div>
+        )}
+        
+        {isInView && !hasError && (
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            poster={thumbnailUrl}
+            loop
+            muted={isMuted}
+            playsInline
+            preload="auto"
+            onLoadedData={() => setIsLoaded(true)}
+            onError={handleVideoError}
+          >
+            <source src={project.videoUrl} type="video/mp4" />
+          </video>
+        )}
+        
+        {/* Mute/Unmute button */}
+        {isInView && !hasError && (
+          <button
+            onClick={(e) => toggleMute(project.id, e)}
+            className="absolute bottom-4 right-4 z-30 p-2 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/80 transition-all opacity-0 group-hover:opacity-100"
+            aria-label={isMuted ? "Unmute" : "Mute"}
+          >
+            {isMuted ? <VolumeX size={16} className="text-white" /> : <Volume2 size={16} className="text-white" />}
+          </button>
+        )}
+        
+        {/* Overlay gradients and play button - only show when not playing */}
+        {!isPlaying && !isAutoPlaying && (
           <>
-            {(!isLoaded || !isInView) && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
-                <Loader2 size={32} className="text-blue-500 animate-spin" />
-              </div>
-            )}
-            
-            {hasError && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900 z-10">
-                <Film size={32} className="text-zinc-600 mb-2" />
-                <p className="text-xs text-zinc-500">Video unavailable</p>
-              </div>
-            )}
-            
-            {isInView && !hasError && (
-              <video
-                ref={videoRef}
-                className="absolute inset-0 w-full h-full object-cover"
-                poster={thumbnailUrl}
-                muted
-                playsInline
-                preload="metadata"
-                onLoadedData={() => setIsLoaded(true)}
-                onError={handleVideoError}
-              >
-                <source src={project.videoUrl} type="video/mp4" />
-              </video>
-            )}
-            
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20" />
             
             <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-20">
@@ -283,6 +343,7 @@ const WorkGallery = ({ onVideoSelect }) => {
           </>
         )}
         
+        {/* Show controls when playing */}
         {isPlaying && !hasError && (
           <video
             ref={videoRef}
@@ -302,7 +363,80 @@ const WorkGallery = ({ onVideoSelect }) => {
     );
   };
 
-  // YouTube Video Component (Inline Playback)
+  // Vimeo Video Component (Autoplay on scroll)
+  const VimeoVideo = ({ project, section, isPlaying, onClick }) => {
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
+    const [isInView, setIsInView] = useState(false);
+    const containerRef = useRef(null);
+    const iframeRef = useRef(null);
+    
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          setIsInView(entries[0].isIntersecting);
+        },
+        { threshold: 0.5, rootMargin: "50px" }
+      );
+      
+      if (containerRef.current) observer.observe(containerRef.current);
+      return () => observer.disconnect();
+    }, []);
+    
+    return (
+      <div 
+        ref={containerRef}
+        className={`group relative rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 border ${section.borderColor} hover:border-white/30 transition-all duration-500 cursor-pointer hover:shadow-2xl aspect-[9/16]`} 
+        onClick={() => onClick(project.id, project.type)}
+      >
+        {!isPlaying && !isInView && (
+          <>
+            {!isImageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
+                <Loader2 size={24} className="text-blue-500 animate-spin" />
+              </div>
+            )}
+            
+            <img 
+              src={project.thumbnail}
+              alt={project.title}
+              className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700 opacity-90 group-hover:opacity-100 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              onLoad={() => setIsImageLoaded(true)}
+              loading="lazy"
+            />
+            
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/40">
+              <div className="bg-red-600 rounded-full p-3 shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
+                <Play size={24} className="text-white" fill="white" />
+              </div>
+            </div>
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-100" />
+            
+            <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-20">
+              <h4 className="text-sm sm:text-base font-black uppercase tracking-tight text-white">{project.title}</h4>
+              <p className="text-[10px] sm:text-xs text-zinc-300 mt-1 font-mono">{project.desc}</p>
+            </div>
+          </>
+        )}
+        
+        {(isPlaying || isInView) && (
+          <iframe
+            ref={iframeRef}
+            className="absolute inset-0 w-full h-full"
+            src={`${project.embedUrl}?autoplay=${isInView && !isPlaying ? '1' : isPlaying ? '1' : '0'}&muted=1&title=0&byline=0&portrait=0&badge=0&loop=1`}
+            title={project.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        )}
+        
+        <div className={`absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-gradient-to-b ${section.color} transition-all duration-500 z-20`} />
+      </div>
+    );
+  };
+
+  // YouTube Video Component (No autoplay for YouTube - click to play)
   const YouTubeVideo = ({ project, section, isPlaying, onClick }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     
@@ -458,12 +592,21 @@ const WorkGallery = ({ onVideoSelect }) => {
                       <div className="flex gap-5 sm:gap-6 md:gap-7">
                         {section.projects.map((project) => (
                           <div key={project.id} className="flex-shrink-0 w-[260px] sm:w-[280px] md:w-[300px]">
-                            <CloudinaryVideo 
-                              project={project} 
-                              section={section} 
-                              isPlaying={playingVideoId === project.id}
-                              onClick={handleVideoClick}
-                            />
+                            {project.type === 'vimeo' ? (
+                              <VimeoVideo 
+                                project={project} 
+                                section={section} 
+                                isPlaying={playingVideoId === project.id}
+                                onClick={handleVideoClick}
+                              />
+                            ) : (
+                              <CloudinaryVideo 
+                                project={project} 
+                                section={section} 
+                                isPlaying={playingVideoId === project.id}
+                                onClick={handleVideoClick}
+                              />
+                            )}
                           </div>
                         ))}
                       </div>
