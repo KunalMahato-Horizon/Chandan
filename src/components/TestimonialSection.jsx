@@ -63,13 +63,13 @@ const TestimonialSection = () => {
   return (
     <section className="relative bg-[#080808] py-20 sm:py-24 md:py-28 lg:py-32 overflow-hidden">
       
-      {/* Background Texture - Matching Hero Section */}
+      {/* Background Texture */}
       <div 
         className="absolute inset-0 z-[1] opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-overlay"
         aria-hidden="true"
       />
       
-      {/* Atmospheric Lighting - Matching Hero Section */}
+      {/* Atmospheric Lighting */}
       <div 
         className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/5 blur-[120px] rounded-full"
         aria-hidden="true"
@@ -79,10 +79,10 @@ const TestimonialSection = () => {
         aria-hidden="true"
       />
       
-      {/* Divider Line Between About and Testimonials */}
+      {/* Divider Line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       
-      {/* Animated Background Blobs - Subtle */}
+      {/* Animated Background Blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-[100px] animate-blob" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-[100px] animate-blob animation-delay-2000" />
@@ -90,7 +90,7 @@ const TestimonialSection = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-10">
         
-        {/* Header with Consistent Styling */}
+        {/* Header */}
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -118,7 +118,7 @@ const TestimonialSection = () => {
           </p>
         </motion.div>
 
-        {/* Category Filters - Consistent Styling */}
+        {/* Category Filters */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -140,75 +140,103 @@ const TestimonialSection = () => {
           ))}
         </motion.div>
 
-        {/* Testimonial Grid */}
-        <motion.div 
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 justify-items-center max-w-4xl mx-auto"
-        >
-          <AnimatePresence>
-            {filteredTestimonials.map((testimonial, idx) => (
-              <motion.div
-                key={testimonial.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, delay: idx * 0.05 }}
-                className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:border-blue-500/30 transition-all duration-500 hover:-translate-y-2 w-full"
-              >
-                {/* Quote Icon */}
-                <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-40 transition-opacity">
-                  <Quote size={24} className="sm:w-6 sm:h-6" />
-                </div>
-        
-                {/* Rating */}
-                <div className="flex items-center gap-1 mb-3 sm:mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      size={12} 
-                      className={`${i < Math.floor(testimonial.rating) ? 'text-yellow-500 fill-yellow-500' : 'text-zinc-700'}`}
-                    />
-                  ))}
-                  <span className="text-zinc-500 text-[10px] sm:text-xs ml-2">{testimonial.rating}</span>
-                </div>
-        
-                {/* Quote Text */}
-                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5">
-                  "{testimonial.quote}"
-                </p>
-        
-                {/* Client Info */}
-                <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                  <div className="relative flex-shrink-0">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-blue-500/30">
-                      <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover" />
+        {/* Main Content Layout - Image on the right, testimonials on the left */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start max-w-6xl mx-auto">
+          
+          {/* Testimonials Grid */}
+          <motion.div 
+            layout
+            className="grid grid-cols-1 gap-5 sm:gap-6"
+          >
+            <AnimatePresence>
+              {filteredTestimonials.map((testimonial, idx) => (
+                <motion.div
+                  key={testimonial.id}
+                  layout
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:border-blue-500/30 transition-all duration-500 hover:-translate-y-2 w-full"
+                >
+                  {/* Quote Icon */}
+                  <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-40 transition-opacity">
+                    <Quote size={24} className="sm:w-6 sm:h-6" />
+                  </div>
+          
+                  {/* Rating */}
+                  <div className="flex items-center gap-1 mb-3 sm:mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        size={12} 
+                        className={`${i < Math.floor(testimonial.rating) ? 'text-yellow-500 fill-yellow-500' : 'text-zinc-700'}`}
+                      />
+                    ))}
+                    <span className="text-zinc-500 text-[10px] sm:text-xs ml-2">{testimonial.rating}</span>
+                  </div>
+          
+                  {/* Quote Text */}
+                  <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5">
+                    "{testimonial.quote}"
+                  </p>
+          
+                  {/* Client Info */}
+                  <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                    <div className="relative flex-shrink-0">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-blue-500/30">
+                        <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 bg-blue-600 rounded-full p-0.5 sm:p-1">
+                        {getSocialIcon(testimonial.social)}
+                      </div>
                     </div>
-                    <div className="absolute -bottom-1 -right-1 bg-blue-600 rounded-full p-0.5 sm:p-1">
-                      {getSocialIcon(testimonial.social)}
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-white font-bold text-xs sm:text-sm truncate">{testimonial.name}</h4>
+                      <p className="text-zinc-500 text-[10px] sm:text-xs truncate">{testimonial.role}</p>
+                      {testimonial.company && (
+                        <p className="text-blue-400 text-[8px] sm:text-[9px] font-mono truncate">{testimonial.company}</p>
+                      )}
                     </div>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <h4 className="text-white font-bold text-xs sm:text-sm truncate">{testimonial.name}</h4>
-                    <p className="text-zinc-500 text-[10px] sm:text-xs truncate">{testimonial.role}</p>
-                    {testimonial.company && (
-                      <p className="text-blue-400 text-[8px] sm:text-[9px] font-mono truncate">{testimonial.company}</p>
-                    )}
+          
+                  {/* Project Tag */}
+                  <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4">
+                    <span className="text-[7px] sm:text-[8px] font-mono bg-white/10 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-zinc-400 truncate max-w-[120px] sm:max-w-none inline-block">
+                      {testimonial.project}
+                    </span>
                   </div>
-                </div>
-        
-                {/* Project Tag */}
-                <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4">
-                  <span className="text-[7px] sm:text-[8px] font-mono bg-white/10 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-zinc-400 truncate max-w-[120px] sm:max-w-none inline-block">
-                    {testimonial.project}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
 
-        {/* Impact Stats with Consistent Styling */}
+          {/* WhatsApp Screenshot Image - Clean version without badges */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="sticky top-8 flex justify-center"
+          >
+            <div className="relative group">
+              {/* Glow Effect */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-green-600/20 to-emerald-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Main Image Card - Preserving original size */}
+              <div className="relative rounded-2xl border border-white/20 bg-white/5 backdrop-blur-sm shadow-2xl transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-green-500/25 overflow-hidden">
+                <img 
+                  src="https://res.cloudinary.com/dkbp9awk3/image/upload/q_auto/f_auto/v1779943075/Review_Screenshot_huwckd.png" 
+                  alt="WhatsApp review screenshot from satisfied client"
+                  className="w-auto h-auto"
+                  style={{ maxWidth: '100%', height: 'auto' }}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Impact Stats */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -239,7 +267,7 @@ const TestimonialSection = () => {
           ))}
         </motion.div>
 
-        {/* CTA - Consistent with Hero Section Button */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
