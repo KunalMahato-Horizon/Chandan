@@ -65,7 +65,7 @@ const AboutContact = () => {
     { name: "Animations", level: 4, icon: <PenTool size={12} /> },
   ];
 
-  // Clients - only images and ratings, simple
+  // Clients - only images and ratings, no names or roles
   const clients = [
     { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Anamika_celokx.jpg", rating: 5 },
     { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Damini_ikoill.jpg", rating: 5 },
@@ -73,7 +73,7 @@ const AboutContact = () => {
     { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Ayussh_ovybxh.jpg", rating: 5 },
     { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861175/Isha_anfl8y.jpg", rating: 5 },
     { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1774861174/Sanidhay_ibzkqu.jpg", rating: 5 },
-    // Two new images
+    { image: "https://res.cloudinary.com/dkbp9awk3/image/upload/q_auto/f_auto/v1781361553/446317681_1438918940112307_8933083068961841617_n.jpg_rwft3b.jpg", rating: 5 },
     { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1777394676/Client_xrrjvh.jpg", rating: 5 },
     { image: "https://res.cloudinary.com/dla8tkflq/image/upload/v1777394675/Client-2_zstha5.jpg", rating: 5 },
   ];
