@@ -1,26 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Smartphone, Mic, Film, ChevronLeft, ChevronRight as ChevronRightIcon, Award, Loader2, Volume2, VolumeX } from "lucide-react";
+import { Play, Smartphone, Mic, Film, Award, Loader2, Volume2, VolumeX } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 const WorkGallery = ({ onVideoSelect }) => {
   const [playingVideoId, setPlayingVideoId] = useState(null);
   const [mutedVideos, setMutedVideos] = useState({});
-  const scrollContainerRef = useRef(null);
   const videoRefs = useRef({});
-
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -320, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 320, behavior: 'smooth' });
-    }
-  };
 
   // Get Cloudinary thumbnail URL
   const getCloudinaryThumbnail = (videoUrl) => {
@@ -36,8 +23,6 @@ const WorkGallery = ({ onVideoSelect }) => {
       [videoId]: !prev[videoId]
     }));
   };
-
-  // Updated shorts/reels with new Cloudinary URLs and Vimeo video
 
   const shortsProjects = [
     { 
@@ -98,9 +83,22 @@ const WorkGallery = ({ onVideoSelect }) => {
       id: "v8",
       type: "vimeo"
     },
+    { 
+      title: "Fitness Coach Reel", 
+      desc: "High-energy fitness coaching reel with dynamic cuts and engaging visuals",
+      videoUrl: "https://res.cloudinary.com/dla8tkflq/video/upload/v1789011977/VID-20260505-WA0012_oqwgiq.mp4", 
+      id: "fitness-coach", 
+      type: "cloudinary" 
+    },
+    { 
+      title: "New Reel", 
+      desc: "Fresh new reel content", 
+      videoUrl: "https://res.cloudinary.com/dla8tkflq/video/upload/v1789025658/VID-20251114-WA0019_ukbmap.mp4", 
+      id: "new-reel", 
+      type: "cloudinary" 
+    },
   ];
 
-  // New Long Form video
   const longFormProjects = [
     { 
       title: "The Future of Everything",
@@ -125,7 +123,7 @@ const WorkGallery = ({ onVideoSelect }) => {
       borderColor: "border-blue-500/20",
       accentColor: "blue",
       aspectRatio: "portrait",
-      layout: "scroll",
+      layout: "grid",
       projects: shortsProjects
     },
     {
@@ -214,13 +212,11 @@ const WorkGallery = ({ onVideoSelect }) => {
 
   const handleVideoClick = (projectId, type) => {
     if (playingVideoId === projectId) {
-      // If same video is clicked, stop it
       if (type === 'cloudinary' && videoRefs.current[projectId]) {
         videoRefs.current[projectId].pause();
       }
       setPlayingVideoId(null);
     } else {
-      // Stop any currently playing video
       if (playingVideoId && videoRefs.current[playingVideoId]) {
         if (sections.some(s => s.projects.find(p => p.id === playingVideoId && p.type === 'cloudinary'))) {
           videoRefs.current[playingVideoId].pause();
@@ -241,7 +237,6 @@ const WorkGallery = ({ onVideoSelect }) => {
     
     const isMuted = mutedVideos[project.id] !== undefined ? mutedVideos[project.id] : true;
     
-    // Store video ref in parent ref object
     useEffect(() => {
       if (videoRef.current) {
         videoRefs.current[project.id] = videoRef.current;
@@ -251,7 +246,6 @@ const WorkGallery = ({ onVideoSelect }) => {
       };
     }, [project.id]);
     
-    // Handle autoplay when video comes into view
     useEffect(() => {
       if (isInView && videoRef.current && !hasError && !isPlaying) {
         videoRef.current.muted = isMuted;
@@ -266,7 +260,6 @@ const WorkGallery = ({ onVideoSelect }) => {
       }
     }, [isInView, hasError, isPlaying, isMuted, isAutoPlaying]);
     
-    // Handle playing state (when clicked)
     useEffect(() => {
       if (isPlaying && videoRef.current && !hasError) {
         videoRef.current.muted = false;
@@ -277,7 +270,6 @@ const WorkGallery = ({ onVideoSelect }) => {
       }
     }, [isPlaying, hasError, isAutoPlaying]);
     
-    // Update mute state
     useEffect(() => {
       if (videoRef.current) {
         videoRef.current.muted = isMuted;
@@ -342,7 +334,6 @@ const WorkGallery = ({ onVideoSelect }) => {
           </video>
         )}
         
-        {/* Mute/Unmute button */}
         {isInView && !hasError && (
           <button
             onClick={(e) => toggleMute(project.id, e)}
@@ -353,7 +344,6 @@ const WorkGallery = ({ onVideoSelect }) => {
           </button>
         )}
         
-        {/* Overlay gradients and play button - only show when not playing */}
         {!isPlaying && !isAutoPlaying && (
           <>
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20" />
@@ -371,7 +361,6 @@ const WorkGallery = ({ onVideoSelect }) => {
           </>
         )}
         
-        {/* Show controls when playing */}
         {isPlaying && !hasError && (
           <video
             ref={videoRef}
@@ -600,45 +589,27 @@ const WorkGallery = ({ onVideoSelect }) => {
                 </p>
 
                 {section.id === "shorts" ? (
-                  <div className="relative mt-6">
-                    <button 
-                      onClick={scrollLeft} 
-                      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all hover:scale-110"
-                      aria-label="Scroll left"
-                    >
-                      <ChevronLeft size={18} className="text-white" />
-                    </button>
-                    <button 
-                      onClick={scrollRight} 
-                      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all hover:scale-110"
-                      aria-label="Scroll right"
-                    >
-                      <ChevronRightIcon size={18} className="text-white" />
-                    </button>
-
-                    <div ref={scrollContainerRef} className="overflow-x-auto scrollbar-hide pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                      <div className="flex gap-5 sm:gap-6 md:gap-7">
-                        {section.projects.map((project) => (
-                          <div key={project.id} className="flex-shrink-0 w-[260px] sm:w-[280px] md:w-[300px]">
-                            {project.type === 'vimeo' ? (
-                              <VimeoVideo 
-                                project={project} 
-                                section={section} 
-                                isPlaying={playingVideoId === project.id}
-                                onClick={handleVideoClick}
-                              />
-                            ) : (
-                              <CloudinaryVideo 
-                                project={project} 
-                                section={section} 
-                                isPlaying={playingVideoId === project.id}
-                                onClick={handleVideoClick}
-                              />
-                            )}
-                          </div>
-                        ))}
+                  /* ✅ CHANGED: Grid layout – 4 per row on large screens */
+                  <div className="grid gap-4 sm:gap-5 md:gap-6 mt-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    {section.projects.map((project) => (
+                      <div key={project.id} className="w-full">
+                        {project.type === 'vimeo' ? (
+                          <VimeoVideo 
+                            project={project} 
+                            section={section} 
+                            isPlaying={playingVideoId === project.id}
+                            onClick={handleVideoClick}
+                          />
+                        ) : (
+                          <CloudinaryVideo 
+                            project={project} 
+                            section={section} 
+                            isPlaying={playingVideoId === project.id}
+                            onClick={handleVideoClick}
+                          />
+                        )}
                       </div>
-                    </div>
+                    ))}
                   </div>
                 ) : (
                   <div className={`grid gap-4 sm:gap-5 md:gap-6 mt-4 sm:mt-5 md:mt-6 grid-cols-1 lg:grid-cols-2`}>
